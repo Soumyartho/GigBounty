@@ -1,4 +1,5 @@
 # 🎨 TrustAudit UI System
+
 Flat Light Mode – Drag & Drop Design Guide
 
 Inspired by the Creative Flat Theme (Uploaded Reference)
@@ -25,6 +26,7 @@ This document defines a component-driven, token-based flat design system for bui
 Every design decision in TrustAudit must pass through the CRAP framework.
 
 ### C — Contrast
+
 - Create clear visual hierarchy through size, weight, color, and spacing
 - Use contrast to guide user attention to primary actions and key content
 - Ensure 4.5:1 minimum contrast ratio for text (7:1 for premium body content)
@@ -34,6 +36,7 @@ Every design decision in TrustAudit must pass through the CRAP framework.
 - Each hierarchy level must be distinctly different — no ambiguity
 
 ### R — Repetition
+
 - Establish consistent design patterns throughout the experience
 - Repeat design tokens (colors, fonts, spacing values) across all components
 - Build visual rhythm — all cards, buttons, forms follow the same flat treatment
@@ -41,6 +44,7 @@ Every design decision in TrustAudit must pass through the CRAP framework.
 - Component consistency is non-negotiable: if one card has 24px padding, all do
 
 ### A — Alignment
+
 - Everything aligns to the 8px grid — nothing is arbitrary
 - Use alignment to create visual connections between elements
 - Strong vertical and horizontal rhythms guide the eye
@@ -49,6 +53,7 @@ Every design decision in TrustAudit must pass through the CRAP framework.
 - Intentional breaks in alignment create emphasis, not chaos
 
 ### P — Proximity
+
 - Group related elements together to show relationships
 - Use whitespace to separate unrelated content
 - Create visual "chunks" of information for cognitive ease
@@ -63,41 +68,47 @@ Every design decision in TrustAudit must pass through the CRAP framework.
 ### 🎨 Color System
 
 **Backgrounds**
+
 ```css
---bg-primary: #F4EFE7;      /* Soft beige base */
---bg-card: #FFFFFF;
---bg-accent-soft: #FCE8EC;  /* Soft pink circle tone */
+--bg-primary: #f4efe7; /* Soft beige base */
+--bg-card: #ffffff;
+--bg-accent-soft: #fce8ec; /* Soft pink circle tone */
 ```
 
 **Typography Colors**
+
 ```css
 --text-primary: #111111;
---text-secondary: #4A4A4A;
---text-muted: #7A7A7A;
+--text-secondary: #4a4a4a;
+--text-muted: #7a7a7a;
 ```
 
 **Accent Palette (Flat Pops)**
+
 ```css
---accent-green: #A3E635;
---accent-coral: #F97316;
---accent-blue: #2563EB;
---accent-yellow: #FACC15;
+--accent-green: #a3e635;
+--accent-coral: #f97316;
+--accent-blue: #2563eb;
+--accent-yellow: #facc15;
 --accent-black: #000000;
 ```
 
 **Borders**
+
 ```css
---border-light: #E5E5E5;
+--border-light: #e5e5e5;
 --border-dark: #111111;
 ```
 
 **60-30-10 Color Rule**
+
 - 60% → `--bg-primary` (beige — background, large surfaces)
 - 30% → `--bg-card` + `--bg-accent-soft` (white cards, pink accents)
 - 10% → Accent pops (`--accent-green`, `--accent-coral`, `--accent-blue`)
 - Never let accents exceed 10% — they must shock, not overwhelm
 
 **Color Psychology — TrustAudit Context**
+
 - Green (`--accent-green`): Action, success, trust — used for primary CTAs and PASS states
 - Coral (`--accent-coral`): Energy, alert — used for FAIL states and attention markers
 - Blue (`--accent-blue`): Trust, professionalism — used for progress bars, active states
@@ -124,7 +135,7 @@ Every design decision in TrustAudit must pass through the CRAP framework.
 **Type Scale**
 
 | Element | Size (Desktop) | Size (Mobile) | Weight | Notes           |
-|---------|----------------|---------------|--------|-----------------|
+| ------- | -------------- | ------------- | ------ | --------------- |
 | H1      | 56px           | 40px          | 700    | -1px tracking   |
 | H2      | 40px           | 32px          | 600    |                 |
 | H3      | 28px           | 24px          | 600    |                 |
@@ -152,15 +163,15 @@ Every design decision in TrustAudit must pass through the CRAP framework.
 
 ### 📐 Spacing System (8px Grid)
 
-| Type            | Size  |
-|-----------------|-------|
-| Micro           | 4px   |
-| Tight           | 8px   |
-| Default         | 16px  |
-| Component Gap   | 24px  |
-| Section Padding | 32px  |
-| Section Space   | 64px  |
-| Major Sections  | 96px  |
+| Type            | Size |
+| --------------- | ---- |
+| Micro           | 4px  |
+| Tight           | 8px  |
+| Default         | 16px |
+| Component Gap   | 24px |
+| Section Padding | 32px |
+| Section Space   | 64px |
+| Major Sections  | 96px |
 
 Everything must align to this 8px system. No arbitrary values.
 
@@ -202,6 +213,7 @@ OPTIONS: [Modifiers]
 - 50% Flat Illustration (Right)
 
 **Structure**
+
 - Headline
 - Subtext
 - Primary CTA
@@ -219,6 +231,7 @@ OPTIONS: [Modifiers]
 - Soft organic circle background (pink `#FCE8EC`)
 
 **CRAP Check:**
+
 - Contrast: 56px bold headline vs 18px body — ✓
 - Repetition: Accent green CTA matches design system — ✓
 - Alignment: All text left-aligned, grid-aligned — ✓
@@ -250,6 +263,7 @@ OPTIONS: [Modifiers]
 ### 🟨 3️⃣ ScoreCard
 
 **Structure**
+
 - Title
 - Progress Bar
 - Score %
@@ -293,6 +307,7 @@ OPTIONS: [Modifiers]
 ### 🟧 5️⃣ FormCard
 
 **Structure**
+
 - Label
 - Input
 - Helper Text
@@ -331,11 +346,11 @@ OPTIONS: [Modifiers]
 
 **Hierarchy**
 
-| Level     | Style                                  | Usage                    |
-|-----------|----------------------------------------|--------------------------|
-| Primary   | Accent Green fill, black text          | Main CTAs (Submit, Audit)|
-| Secondary | Outline black, 1px border, transparent | Secondary actions        |
-| Tertiary  | Text-only, underline on hover          | Links, minor actions     |
+| Level     | Style                                  | Usage                     |
+| --------- | -------------------------------------- | ------------------------- |
+| Primary   | Accent Green fill, black text          | Main CTAs (Submit, Audit) |
+| Secondary | Outline black, 1px border, transparent | Secondary actions         |
+| Tertiary  | Text-only, underline on hover          | Links, minor actions      |
 
 **Shared Rules**
 
@@ -417,7 +432,9 @@ Inspired by the reference image:
 
 ```css
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
@@ -432,6 +449,7 @@ Inspired by the reference image:
 AI Agent Commands follow this structure:
 
 **Example Hero**
+
 ```
 CREATE: HeroBlock
 STYLE: Flat Modern
@@ -443,6 +461,7 @@ CTA_SECONDARY: outline-black
 ```
 
 **Example Dashboard**
+
 ```
 CREATE: BentoGrid
 COLUMNS: 3
@@ -455,6 +474,7 @@ BORDER: 1px neutral
 ```
 
 **Example Form**
+
 ```
 CREATE: FormCard
 INPUTS:
@@ -549,3 +569,81 @@ Following this guide will produce:
 - Clear hierarchy and trust through CRAP principles
 - Flat premium design inspired by the reference theme
 - Accessible, performant, and production-ready frontend
+
+---
+
+## 🔍 DESIGN ANALYSIS (Auto-Generated)
+
+> The following analysis was produced by cross-referencing this document with `proejct_knowledge.md` and `Algorand.md` in the same repository.
+
+---
+
+### DESIGN SYSTEM ASSESSMENT
+
+**What's Well-Defined:**
+
+- ✅ **Complete color token system** — Backgrounds, typography, accents, and borders all tokenized with CSS custom properties
+- ✅ **Typography scale** — Desktop and mobile sizes for H1–H3, body, and small text with weight and tracking specs
+- ✅ **8px spacing grid** — Seven defined spacing values from 4px (micro) to 96px (major sections)
+- ✅ **Responsive breakpoints** — Four tiers: mobile, tablet, desktop, large desktop with specific layout rules per tier
+- ✅ **CRAP validation** — Each major component includes a CRAP principles check
+- ✅ **60-30-10 color rule** — Prevents accent color overuse
+- ✅ **Animation system** — Performance-focused (GPU-only transforms), accessibility-aware (`prefers-reduced-motion`)
+- ✅ **Accessibility targets** — 7:1 body text contrast (above WCAG AA), color blindness validation required
+
+**What's Missing or Underspecified:**
+
+- ⚠️ **No dark mode** — The system is explicitly "Flat Light Mode" only. If dark mode is ever needed, the entire token system will need a second layer.
+- ⚠️ **No error states** — Form validation messages, error alerts, empty states, and 404 pages are not designed
+- ⚠️ **No toast/notification component** — Transaction confirmations, wallet connect success, and error alerts need a notification pattern
+- ⚠️ **No modal component** — The product requires a "Submit Proof Modal" (per `proejct_knowledge.md`) but no modal is defined here
+- ⚠️ **No navigation/header component** — Navbar with wallet connect button is a core requirement but not in the component library
+- ⚠️ **No table component** — The task board will likely need a table or list view not covered by BentoGrid alone
+
+---
+
+### COMPONENT ↔ PRODUCT MAPPING
+
+How well do the 7 defined components cover the product requirements from `proejct_knowledge.md`:
+
+| Product Requirement    | Matching Component                | Coverage                                                                 |
+| ---------------------- | --------------------------------- | ------------------------------------------------------------------------ |
+| Task Board             | **BentoGrid**                     | ✅ Partial — good for dashboard, may need list view variant              |
+| Post Task Form         | **FormCard**                      | ✅ Full — inputs, labels, validation, button                             |
+| Claim Button           | **Button System** (Primary)       | ✅ Full                                                                  |
+| Approve Button         | **Button System** (Primary)       | ✅ Full                                                                  |
+| Status Badges          | **BlockchainBadge**               | ✅ Adaptable — needs color variants for OPEN/CLAIMED/SUBMITTED/COMPLETED |
+| AI Score Display       | **ScoreCard**                     | ✅ Full — progress bar + verdict badge                                   |
+| Audit Flow Visual      | **StepperHorizontal**             | ✅ Full — Input → AI Audit → On-Chain → Verified                         |
+| Wallet Connect Button  | ❌ Not defined                    | ❌ Needs a new component spec                                            |
+| Submit Proof Modal     | ❌ Not defined                    | ❌ Needs a modal overlay spec                                            |
+| Navigation Bar         | ❌ Not defined                    | ❌ Needs header/nav spec                                                 |
+| Transaction ID Display | ❌ Not defined                    | ❌ Needs a code/hash display pattern                                     |
+| Loading States         | Skeleton blocks (described in §4) | ✅ Concept defined, no component spec                                    |
+
+---
+
+### CROSS-DOCUMENT CONFLICT: CSS Framework
+
+This design system defines **vanilla CSS custom properties** (`--bg-primary`, `--accent-green`, etc.) with explicit pixel values for every component. However, `proejct_knowledge.md` specifies **Tailwind CSS** as the frontend styling tool.
+
+**Resolution Options:**
+
+1. **Tailwind + Custom Theme** — Map all design tokens into `tailwind.config.js` as custom theme values. Use Tailwind utility classes for layout, the custom theme for colors/spacing. This is the most practical approach for a hackathon.
+2. **Pure Vanilla CSS** — Ignore Tailwind entirely, implement the design system as written with CSS custom properties and component-scoped stylesheets.
+3. **Hybrid** — Use Tailwind for responsive utilities and layout, but apply design tokens via CSS variables for colors and typography.
+
+---
+
+### BRANDING NOTE
+
+This document brands the product as **"TrustAudit"** throughout. The project folder is named **"GigBounty"** and `proejct_knowledge.md` calls it **"Decentralized Micro-Task Bounty Board"**. The design system's identity (playful, trustworthy, clean, bold, modern) applies regardless of final name — but all references should be unified before implementation.
+
+---
+
+### IMPLEMENTATION NOTES
+
+1. **Font Loading Priority** — Preload Syne (display font) in `<head>` since it's used for H1 hero text, the first thing users see. Inter can load via Google Fonts with `&display=swap`.
+2. **CSS Variable Fallbacks** — When implementing, always provide fallback values: `color: var(--text-primary, #111111)` to prevent broken rendering if tokens fail to load.
+3. **Component Build Order** — Start with the Button System and FormCard (used everywhere), then ScoreCard and BentoGrid (dashboard), then HeroBlock (landing page). StepperHorizontal and BlockchainBadge are lower priority.
+4. **Missing Components to Build** — Navigation bar, modal overlay, toast notifications, and transaction hash display should be designed following the same token system and CRAP principles defined here.
