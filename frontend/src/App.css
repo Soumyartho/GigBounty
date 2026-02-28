@@ -407,9 +407,9 @@
 }
 
 .task-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(163, 230, 53, 0.6);
-  box-shadow: 0 0 0 2px rgba(163, 230, 53, 0.2), 0 0 20px rgba(163, 230, 53, 0.15);
+  transform: translateY(-4px);
+  border-color: rgba(163, 230, 53, 0.8);
+  box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.35), 0 0 24px rgba(163, 230, 53, 0.3), 0 0 48px rgba(163, 230, 53, 0.1);
 }
 
 .task-card-header {
@@ -581,9 +581,9 @@
 }
 
 .stat-item:hover {
-  border-color: rgba(163, 230, 53, 0.6);
-  box-shadow: 0 0 0 2px rgba(163, 230, 53, 0.2), 0 0 16px rgba(163, 230, 53, 0.15);
-  transform: translateY(-2px);
+  border-color: rgba(163, 230, 53, 0.8);
+  box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.35), 0 0 24px rgba(163, 230, 53, 0.3), 0 0 48px rgba(163, 230, 53, 0.1);
+  transform: translateY(-3px);
 }
 
 .stat-number {
@@ -637,9 +637,9 @@
 }
 
 .step-card:hover {
-  border-color: rgba(163, 230, 53, 0.6);
-  box-shadow: 0 0 0 2px rgba(163, 230, 53, 0.2), 0 0 16px rgba(163, 230, 53, 0.15);
-  transform: translateY(-2px);
+  border-color: rgba(163, 230, 53, 0.8);
+  box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.35), 0 0 24px rgba(163, 230, 53, 0.3), 0 0 48px rgba(163, 230, 53, 0.1);
+  transform: translateY(-3px);
 }
 
 .step-number {
