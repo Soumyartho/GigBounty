@@ -64,7 +64,7 @@ export default function TaskBoard({ tasks, loading, walletAddress, onClaim, onSu
             </>
           ) : filteredTasks.length > 0 ? (
             filteredTasks.map(task => (
-              <motion.div key={task.id} variants={cardVariant}>
+              <motion.div key={task.id} variants={cardVariant} style={{ height: '100%' }}>
                 <TaskCard
                   task={task}
                   walletAddress={walletAddress}
