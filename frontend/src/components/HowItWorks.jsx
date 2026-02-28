@@ -15,6 +15,7 @@ export default function HowItWorks() {
         </svg>
       ),
       color: '#DBEAFE',
+      border: '#93C5FD',
     },
     {
       number: 2,
@@ -30,6 +31,7 @@ export default function HowItWorks() {
         </svg>
       ),
       color: '#D1FAE5',
+      border: '#6EE7B7',
     },
     {
       number: 3,
@@ -46,6 +48,7 @@ export default function HowItWorks() {
         </svg>
       ),
       color: '#EDE9FE',
+      border: '#C4B5FD',
     },
     {
       number: 4,
@@ -62,6 +65,7 @@ export default function HowItWorks() {
         </svg>
       ),
       color: '#FEF3C7',
+      border: '#FCD34D',
     },
   ];
 
@@ -82,7 +86,7 @@ export default function HowItWorks() {
         <div className="steps-flow">
           {steps.map((step, i) => (
             <div className="step-flow-group" key={step.number}>
-              <div className="step-card" style={{ backgroundColor: step.color }}>
+              <div className="step-card" style={{ backgroundColor: step.color, borderColor: step.border }}>
                 <div className="step-icon">{step.icon}</div>
                 <div className="step-label">{step.label}</div>
                 <h3>{step.title}</h3>

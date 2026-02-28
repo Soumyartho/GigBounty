@@ -712,7 +712,7 @@
 }
 
 .step-card {
-  border: none;
+  border: 2px solid;
   border-radius: 16px;
   padding: 36px 28px;
   text-align: center;
