@@ -42,12 +42,12 @@ export default function ForBusinessPage() {
           <motion.h2 variants={fadeUp(16)} {...scrollProps}>The Problems We Solve</motion.h2>
           <motion.div className="pain-grid" variants={sectionContainer} {...scrollProps}>
             {[
-              { title: 'Payment Disputes', stat: '$2.8B', desc: 'Lost annually in freelancing payment disputes. Our escrow eliminates this entirely.' },
-              { title: 'Fraudulent Submissions', stat: '23%', desc: 'Of freelancing deliverables fail quality checks. Our AI catches these automatically.' },
-              { title: 'Slow Payouts', stat: '14 days', desc: 'Average payout delay on major platforms. We release payments in 4 seconds.' },
-              { title: 'Platform Losses', stat: '8-15%', desc: 'Revenue lost to chargebacks and disputes. GigBounty reduces this to near-zero.' },
+              { title: 'Payment Disputes', stat: '$2.8B', desc: 'Lost annually in freelancing payment disputes. Our escrow eliminates this entirely.', bg: '#DBEAFE', border: '#93C5FD' },
+              { title: 'Fraudulent Submissions', stat: '23%', desc: 'Of freelancing deliverables fail quality checks. Our AI catches these automatically.', bg: '#EDE9FE', border: '#C4B5FD' },
+              { title: 'Slow Payouts', stat: '14 days', desc: 'Average payout delay on major platforms. We release payments in 4 seconds.', bg: '#FEF3C7', border: '#FCD34D' },
+              { title: 'Platform Losses', stat: '8-15%', desc: 'Revenue lost to chargebacks and disputes. GigBounty reduces this to near-zero.', bg: '#D1FAE5', border: '#6EE7B7' },
             ].map((item, i) => (
-              <motion.div className="pain-card" key={i} variants={cardVariant} whileHover={prefersReduced ? {} : cardHover}>
+              <motion.div className="pain-card" key={i} variants={cardVariant} whileHover={prefersReduced ? {} : cardHover} style={{ backgroundColor: item.bg, borderColor: item.border }}>
                 <div className="pain-stat">{item.stat}</div>
                 <h3>{item.title}</h3>
                 <p>{item.desc}</p>
@@ -66,13 +66,58 @@ export default function ForBusinessPage() {
           </motion.p>
           <motion.div className="flow-steps" variants={sectionContainer} {...scrollProps}>
             {[
-              { step: '1', title: 'Worker Submits', desc: 'Worker submits their deliverable through your platform. GigBounty receives the submission via API.', color: '#DBEAFE' },
-              { step: '2', title: 'AI Verifies', desc: 'Our AI analyzes the submission — checks code, evaluates design, reads documentation. Pass/fail verdict issued.', color: '#EDE9FE' },
-              { step: '3', title: 'AI Prices It', desc: 'Based on quality, complexity, and scope, the AI suggests a fair price. The poster reviews and decides.', color: '#FEF3C7' },
-              { step: '4', title: 'Instant Payout', desc: 'Payment is released from the Algorand escrow to the worker\'s wallet in 4 seconds. Verifiable on-chain.', color: '#D1FAE5' },
+              {
+                step: '1', title: 'Worker Submits',
+                desc: 'Worker submits their deliverable through your platform. GigBounty receives the submission via API.',
+                bg: '#DBEAFE', border: '#93C5FD',
+                icon: (
+                  <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
+                    <path d="M14 36V12C14 10.3 15.3 9 17 9H31C32.7 9 34 10.3 34 12V36" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+                    <polyline points="14 36 24 42 34 36" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                    <line x1="20" y1="18" x2="28" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    <line x1="20" y1="24" x2="28" y2="24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    <line x1="20" y1="30" x2="25" y2="30" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                ),
+              },
+              {
+                step: '2', title: 'AI Verifies',
+                desc: 'Our AI analyzes the submission — checks code, evaluates design, reads documentation. Pass/fail verdict issued.',
+                bg: '#EDE9FE', border: '#C4B5FD',
+                icon: (
+                  <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
+                    <circle cx="24" cy="24" r="14" stroke="currentColor" strokeWidth="2.5" fill="none" />
+                    <path d="M18 24L22 28L30 20" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                ),
+              },
+              {
+                step: '3', title: 'AI Prices It',
+                desc: 'Based on quality, complexity, and scope, the AI suggests a fair price. The poster reviews and decides.',
+                bg: '#FEF3C7', border: '#FCD34D',
+                icon: (
+                  <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
+                    <circle cx="24" cy="24" r="14" stroke="currentColor" strokeWidth="2.5" fill="none" />
+                    <path d="M20 20C20 18 22 16 24 16C26 16 28 18 28 20C28 22 26 22 24 23V26" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+                    <circle cx="24" cy="31" r="1.5" fill="currentColor" />
+                  </svg>
+                ),
+              },
+              {
+                step: '4', title: 'Instant Payout',
+                desc: 'Payment is released from the Algorand escrow to the worker\'s wallet in 4 seconds. Verifiable on-chain.',
+                bg: '#D1FAE5', border: '#6EE7B7',
+                icon: (
+                  <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
+                    <rect x="8" y="14" width="32" height="22" rx="3" stroke="currentColor" strokeWidth="2.5" fill="none" />
+                    <line x1="8" y1="22" x2="40" y2="22" stroke="currentColor" strokeWidth="2" />
+                    <path d="M24 28V32M20 30H28" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                ),
+              },
             ].map((item) => (
-              <motion.div className="flow-step" key={item.step} variants={cardVariant} whileHover={prefersReduced ? {} : cardHover}>
-                <div className="flow-step-num" style={{ background: item.color }}>{item.step}</div>
+              <motion.div className="flow-step" key={item.step} variants={cardVariant} whileHover={prefersReduced ? {} : cardHover} style={{ backgroundColor: item.bg, borderColor: item.border }}>
+                <div className="flow-step-icon">{item.icon}</div>
                 <h3>{item.title}</h3>
                 <p>{item.desc}</p>
               </motion.div>

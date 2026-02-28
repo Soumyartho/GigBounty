@@ -22,7 +22,7 @@ export default function AboutPage() {
             Redefining <span className="text-highlight">Fair Pay</span> in Freelancing
           </motion.h1>
           <motion.p className="about-hero-subtitle" variants={fadeUp(20)} {...scrollProps}>
-            GigBounty combines blockchain-secured escrow with AI-powered work verification 
+            GigBounty combines blockchain-secured escrow with AI-powered work verification
             to eliminate payment disputes — for individuals and platforms alike.
           </motion.p>
         </div>
@@ -39,7 +39,7 @@ export default function AboutPage() {
               <span className="model-label">FOR FREELANCERS</span>
               <h3>Bounty Board</h3>
               <p>
-                Post tasks with ALGO bounties, claim work, submit proof, and get paid instantly — 
+                Post tasks with ALGO bounties, claim work, submit proof, and get paid instantly —
                 no middlemen, no payment delays, no disputes.
               </p>
               <ul className="model-features">
@@ -64,7 +64,7 @@ export default function AboutPage() {
               <span className="model-label">FOR PLATFORMS</span>
               <h3>Plugin Integration</h3>
               <p>
-                Freelancing platforms integrate GigBounty as a plugin — we handle AI verification, 
+                Freelancing platforms integrate GigBounty as a plugin — we handle AI verification,
                 price suggestions, and blockchain payments so you don't have to.
               </p>
               <ul className="model-features">
@@ -99,23 +99,26 @@ export default function AboutPage() {
                 step: '01',
                 title: 'AI Reviews the Work',
                 description: 'Our AI analyzes submitted code, designs, or documents for completeness, quality, and authenticity.',
-                color: '#EDE9FE',
+                bg: '#EDE9FE',
+                border: '#C4B5FD',
               },
               {
                 step: '02',
                 title: 'AI Suggests a Price',
                 description: 'Based on complexity, scope, and quality, the AI recommends a fair payment amount to the project poster.',
-                color: '#FEF3C7',
+                bg: '#FEF3C7',
+                border: '#FCD34D',
               },
               {
                 step: '03',
                 title: 'Poster Decides',
                 description: 'Accept the AI-suggested price, or set your own amount. Either way, payment is released instantly from escrow.',
-                color: '#D1FAE5',
+                bg: '#D1FAE5',
+                border: '#6EE7B7',
               },
             ].map((item) => (
-              <motion.div className="ai-step-card" key={item.step} variants={cardVariant} whileHover={prefersReduced ? {} : cardHover}>
-                <div className="ai-step-number" style={{ background: item.color }}>{item.step}</div>
+              <motion.div className="ai-step-card" key={item.step} variants={cardVariant} whileHover={prefersReduced ? {} : cardHover} style={{ backgroundColor: item.bg, borderColor: item.border }}>
+                <div className="ai-step-number" style={{ background: item.bg, borderColor: item.border }}>{item.step}</div>
                 <h3>{item.title}</h3>
                 <p>{item.description}</p>
               </motion.div>
@@ -130,12 +133,59 @@ export default function AboutPage() {
           <motion.h2 variants={fadeUp(16)} {...scrollProps}>Secured by Algorand</motion.h2>
           <motion.div className="security-grid" variants={sectionContainer} {...scrollProps}>
             {[
-              { icon: '🔒', title: 'Escrow Protection', desc: 'Funds are locked in a blockchain-controlled escrow wallet. Neither party can steal the funds.' },
-              { icon: '⚡', title: '4-Second Finality', desc: 'Algorand confirms transactions in ~4 seconds with near-zero fees (0.001 ALGO).' },
-              { icon: '🔍', title: 'Full Transparency', desc: 'Every transaction is publicly verifiable on the Algorand blockchain explorer.' },
-              { icon: '🤖', title: 'AI + Human Verification', desc: 'AI provides the first check. The poster makes the final call. Both layers protect your money.' },
+              {
+                icon: (
+                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <rect x="12" y="20" width="24" height="20" rx="3" stroke="currentColor" strokeWidth="2.5" fill="none" />
+                    <path d="M18 20V14C18 10.7 20.7 8 24 8C27.3 8 30 10.7 30 14V20" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+                    <circle cx="24" cy="31" r="3" stroke="currentColor" strokeWidth="2" fill="none" />
+                    <line x1="24" y1="34" x2="24" y2="37" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                ),
+                title: 'Escrow Protection',
+                desc: 'Funds are locked in a blockchain-controlled escrow wallet. Neither party can steal the funds.',
+                bg: '#DBEAFE', border: '#93C5FD',
+              },
+              {
+                icon: (
+                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <path d="M28 6L18 24H28L20 42" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                  </svg>
+                ),
+                title: '4-Second Finality',
+                desc: 'Algorand confirms transactions in ~4 seconds with near-zero fees (0.001 ALGO).',
+                bg: '#EDE9FE', border: '#C4B5FD',
+              },
+              {
+                icon: (
+                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <circle cx="22" cy="22" r="10" stroke="currentColor" strokeWidth="2.5" fill="none" />
+                    <line x1="29" y1="29" x2="40" y2="40" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                    <circle cx="22" cy="22" r="4" stroke="currentColor" strokeWidth="2" fill="none" />
+                  </svg>
+                ),
+                title: 'Full Transparency',
+                desc: 'Every transaction is publicly verifiable on the Algorand blockchain explorer.',
+                bg: '#D1FAE5', border: '#6EE7B7',
+              },
+              {
+                icon: (
+                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <rect x="10" y="10" width="28" height="22" rx="4" stroke="currentColor" strokeWidth="2.5" fill="none" />
+                    <circle cx="20" cy="20" r="2.5" stroke="currentColor" strokeWidth="2" fill="none" />
+                    <circle cx="28" cy="20" r="2.5" stroke="currentColor" strokeWidth="2" fill="none" />
+                    <path d="M18 26C18 26 21 29 24 29C27 29 30 26 30 26" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" />
+                    <line x1="18" y1="32" x2="18" y2="38" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                    <line x1="30" y1="32" x2="30" y2="38" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                    <rect x="14" y="6" width="20" height="4" rx="2" stroke="currentColor" strokeWidth="2" fill="none" />
+                  </svg>
+                ),
+                title: 'AI + Human Verification',
+                desc: 'AI provides the first check. The poster makes the final call. Both layers protect your money.',
+                bg: '#FEF3C7', border: '#FCD34D',
+              },
             ].map((item, i) => (
-              <motion.div className="security-card" key={i} variants={cardVariant}>
+              <motion.div className="security-card" key={i} variants={cardVariant} style={{ backgroundColor: item.bg, borderColor: item.border }}>
                 <div className="security-icon">{item.icon}</div>
                 <h4>{item.title}</h4>
                 <p>{item.desc}</p>

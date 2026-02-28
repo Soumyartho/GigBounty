@@ -1334,12 +1334,11 @@
 }
 
 .ai-step-card {
-  background: var(--bg-card);
-  border: 2px solid var(--border-light);
+  border: 2px solid transparent;
   border-radius: var(--radius-default);
   padding: 28px;
   text-align: center;
-  transition: border-color var(--transition-fast);
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
 }
 
 .ai-step-card:hover {
@@ -1379,21 +1378,34 @@
 }
 
 .security-card {
-  background: var(--bg-card);
-  border: 2px solid var(--border-light);
+  border: 2px solid transparent;
   border-radius: var(--radius-default);
   padding: 24px;
   text-align: center;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
 }
 
 .security-icon {
-  font-size: 32px;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
   margin-bottom: 12px;
 }
 
+.security-icon svg {
+  width: 48px;
+  height: 48px;
+}
+
 .security-card h4 {
-  font-size: 16px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
   margin-bottom: 8px;
+  line-height: 1.2;
 }
 
 .security-card p {
@@ -1459,12 +1471,11 @@
 }
 
 .pain-card {
-  background: var(--bg-card);
-  border: 2px solid var(--border-light);
+  border: 2px solid transparent;
   border-radius: var(--radius-default);
   padding: 28px;
   text-align: center;
-  transition: border-color var(--transition-fast);
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
 }
 
 .pain-card:hover {
@@ -1504,12 +1515,11 @@
 }
 
 .flow-step {
-  background: var(--bg-card);
-  border: 2px solid var(--border-light);
+  border: 2px solid transparent;
   border-radius: var(--radius-default);
   padding: 28px;
   text-align: center;
-  transition: border-color var(--transition-fast);
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
 }
 
 .flow-step:hover {
@@ -1529,9 +1539,22 @@
   margin-bottom: 14px;
 }
 
+.flow-step-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  margin: 0 auto 12px;
+}
+
 .flow-step h3 {
-  font-size: 16px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
   margin-bottom: 8px;
+  line-height: 1.2;
 }
 
 .flow-step p {
