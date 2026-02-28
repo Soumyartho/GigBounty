@@ -357,6 +357,46 @@ p {
   border: 1px solid rgba(249, 115, 22, 0.3);
 }
 
+.badge-cancelled {
+  background-color: rgba(0, 0, 0, 0.06);
+  color: #666666;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.badge-expired {
+  background-color: rgba(230, 81, 0, 0.1);
+  color: #E65100;
+  border: 1px solid rgba(230, 81, 0, 0.25);
+}
+
+.badge-disputed {
+  background-color: rgba(198, 40, 40, 0.1);
+  color: #C62828;
+  border: 1px solid rgba(198, 40, 40, 0.25);
+}
+
+/* Button — Danger (cancel / destructive) */
+.btn-danger {
+  background-color: #FFEBEE;
+  color: #C62828;
+  border: 1px solid #FFCDD2;
+}
+
+.btn-danger:hover {
+  background-color: #FFCDD2;
+}
+
+/* Button — Warning (dispute / caution) */
+.btn-warning {
+  background-color: #FFF8E1;
+  color: #E65100;
+  border: 1px solid #FFE082;
+}
+
+.btn-warning:hover {
+  background-color: #FFE082;
+}
+
 /* Blockchain Badge — Pill shape */
 .badge-blockchain {
   background-color: rgba(163, 230, 53, 0.2);

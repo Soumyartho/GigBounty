@@ -53,12 +53,18 @@ const STATUS_TO_STEP = {
   'CLAIMED': 1,
   'SUBMITTED': 2,
   'COMPLETED': 4,
+  'CANCELLED': -1,
+  'EXPIRED': -1,
+  'DISPUTED': -1,
 };
+
+const ERROR_STATUSES = ['CANCELLED', 'EXPIRED', 'DISPUTED'];
 
 const stepperContainer = staggerContainer(0.1, 0.2);
 
 export default function StepperHorizontal({ status = 'OPEN' }) {
-  const currentStep = STATUS_TO_STEP[status] ?? 0;
+  const isErrorStatus = ERROR_STATUSES.includes(status);
+  const currentStep = isErrorStatus ? -1 : (STATUS_TO_STEP[status] ?? 0);
   const scrollProps = useScrollRevealProps();
 
   return (
