@@ -10,7 +10,7 @@ export default function Footer() {
     <motion.footer className="footer" variants={footerVariant} {...scrollProps}>
       <div className="footer-inner">
         <span className="footer-text">
-          © 2026 GigBounty — Decentralized Micro-Task Bounty Board
+          © 2026 GigBounty
         </span>
         <div className="footer-links">
           <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
