@@ -194,16 +194,18 @@ p {
   background-color: #95d42e;
 }
 
-/* Secondary — Outline black, transparent background */
+/* Secondary — Solid green, matching filter button style */
 .btn-secondary {
-  background-color: transparent;
-  color: var(--accent-black);
-  border: 1px solid var(--accent-black);
+  background-color: #A3E635;
+  color: #000000;
+  border: 1px solid #A3E635;
 }
 
 .btn-secondary:hover {
-  background-color: var(--accent-black);
-  color: var(--bg-card);
+  background-color: #95d42e;
+  color: #000000;
+  border-color: #95d42e;
+  box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.45), 0 0 12px rgba(163, 230, 53, 0.3);
 }
 
 /* Tertiary — Text-only, underline on hover */
