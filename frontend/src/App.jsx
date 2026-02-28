@@ -1,17 +1,19 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
-import HeroBlock from './components/HeroBlock';
-import StatsBar from './components/StatsBar';
-import TaskBoard from './components/TaskBoard';
-import PostTaskForm from './components/PostTaskForm';
-import HowItWorks from './components/HowItWorks';
-import StepperHorizontal from './components/StepperHorizontal';
 import SubmitProofModal from './components/SubmitProofModal';
 import Footer from './components/Footer';
 import Toast from './components/Toast';
 import useWallet from './hooks/useWallet';
 import { api } from './services/api';
+
+// Pages
+import HomePage from './pages/HomePage';
+import BountyBoardPage from './pages/BountyBoardPage';
+import TaskDetailPage from './pages/TaskDetailPage';
+import PostTaskPage from './pages/PostTaskPage';
+import MyTasksPage from './pages/MyTasksPage';
 
 // Demo tasks for when backend is not running
 const DEMO_TASKS = [
@@ -96,6 +98,7 @@ function App() {
   const [proofModal, setProofModal] = useState(null);
   const [toast, setToast] = useState(null);
   const [useDemo, setUseDemo] = useState(false);
+  const navigate = useNavigate();
 
   // Fetch tasks from backend or use demo data
   const fetchTasks = useCallback(async () => {
@@ -243,53 +246,62 @@ function App() {
     }
   };
 
-  // Scroll to section
-  const handleNavigate = (section) => {
-    const el = document.getElementById(section === 'home' ? 'root' : section);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    } else if (section === 'home') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
-
   return (
     <>
       <Navbar
         walletAddress={walletAddress}
         onConnect={handleConnect}
         onDisconnect={handleDisconnect}
-        onNavigate={handleNavigate}
       />
 
       <main>
-        <HeroBlock
-          onGetStarted={() => handleNavigate('post')}
-          onLearnMore={() => handleNavigate('how')}
-        />
-
-        <StatsBar tasks={tasks} />
-
-        {/* Stepper showing overall platform flow */}
-        <div className="container" style={{ paddingBottom: '32px' }}>
-          <StepperHorizontal status="OPEN" />
-        </div>
-
-        <TaskBoard
-          tasks={tasks}
-          loading={loading}
-          walletAddress={walletAddress}
-          onClaim={handleClaim}
-          onSubmitProof={handleSubmitProof}
-          onApprove={handleApprove}
-        />
-
-        <PostTaskForm
-          walletAddress={walletAddress}
-          onSubmit={handleCreateTask}
-        />
-
-        <HowItWorks />
+        <Routes>
+          <Route path="/" element={<HomePage tasks={tasks} />} />
+          <Route
+            path="/tasks"
+            element={
+              <BountyBoardPage
+                tasks={tasks}
+                loading={loading}
+                walletAddress={walletAddress}
+                onClaim={handleClaim}
+                onSubmitProof={handleSubmitProof}
+                onApprove={handleApprove}
+              />
+            }
+          />
+          <Route
+            path="/tasks/:id"
+            element={
+              <TaskDetailPage
+                tasks={tasks}
+                walletAddress={walletAddress}
+                onClaim={handleClaim}
+                onSubmitProof={handleSubmitProof}
+                onApprove={handleApprove}
+                useDemo={useDemo}
+              />
+            }
+          />
+          <Route
+            path="/post"
+            element={
+              <PostTaskPage
+                walletAddress={walletAddress}
+                onSubmit={handleCreateTask}
+              />
+            }
+          />
+          <Route
+            path="/my-tasks"
+            element={
+              <MyTasksPage
+                tasks={tasks}
+                walletAddress={walletAddress}
+              />
+            }
+          />
+        </Routes>
       </main>
 
       <Footer />

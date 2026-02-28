@@ -1,5 +1,8 @@
+import { useNavigate } from 'react-router-dom';
+
 export default function TaskCard({ task, walletAddress, onClaim, onSubmitProof, onApprove }) {
   const { id, title, description, amount, status, creator_wallet, worker_wallet, deadline } = task;
+  const navigate = useNavigate();
 
   const isCreator = walletAddress && creator_wallet === walletAddress;
   const isWorker = walletAddress && worker_wallet === walletAddress;
@@ -20,8 +23,14 @@ export default function TaskCard({ task, walletAddress, onClaim, onSubmitProof, 
     return <span className={`badge ${classes[status] || 'badge-open'}`}>{status}</span>;
   };
 
+  const handleCardClick = (e) => {
+    // Don't navigate if clicking a button
+    if (e.target.closest('button')) return;
+    navigate(`/tasks/${id}`);
+  };
+
   return (
-    <div className="task-card" data-status={status}>
+    <div className="task-card" data-status={status} onClick={handleCardClick} style={{ cursor: 'pointer' }}>
       <div className="task-card-header">
         <h3 className="task-card-title">{title}</h3>
         {getStatusBadge()}
