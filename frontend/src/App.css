@@ -226,9 +226,16 @@
   margin-bottom: var(--space-tight);
 }
 
-.hero-float-card .card-line:nth-child(1) { width: 60%; }
-.hero-float-card .card-line:nth-child(2) { width: 90%; }
-.hero-float-card .card-line:nth-child(3) { width: 45%; background: var(--accent-green); }
+.hero-float-card .card-line:nth-child(1) {
+  width: 60%;
+}
+.hero-float-card .card-line:nth-child(2) {
+  width: 90%;
+}
+.hero-float-card .card-line:nth-child(3) {
+  width: 45%;
+  background: var(--accent-green);
+}
 
 .hero-float-badge {
   position: absolute;
@@ -373,9 +380,9 @@
 
 .filter-btn:hover,
 .filter-btn.active {
-  background: var(--accent-black);
-  color: var(--bg-card);
-  border-color: var(--accent-black);
+  background: var(--accent-green);
+  color: var(--accent-black);
+  border-color: var(--accent-green);
 }
 
 .task-grid {
@@ -477,7 +484,7 @@
 
 /* Task card accent stripe */
 .task-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -486,10 +493,18 @@
   border-radius: var(--radius-default) var(--radius-default) 0 0;
 }
 
-.task-card[data-status="OPEN"]::before { background: var(--accent-green); }
-.task-card[data-status="CLAIMED"]::before { background: var(--accent-blue); }
-.task-card[data-status="SUBMITTED"]::before { background: var(--accent-yellow); }
-.task-card[data-status="COMPLETED"]::before { background: var(--accent-coral); }
+.task-card[data-status="OPEN"]::before {
+  background: var(--accent-green);
+}
+.task-card[data-status="CLAIMED"]::before {
+  background: var(--accent-blue);
+}
+.task-card[data-status="SUBMITTED"]::before {
+  background: var(--accent-yellow);
+}
+.task-card[data-status="COMPLETED"]::before {
+  background: var(--accent-coral);
+}
 
 /* ============================================================
    POST TASK FORM
@@ -509,7 +524,7 @@
 }
 
 .post-task-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -60px;
   right: -50px;
@@ -759,11 +774,21 @@
     height: 260px;
   }
 
-  .hero-float-card-1 { width: 220px; left: 20px; }
-  .hero-float-card-2 { width: 190px; }
-  .hero-float-card-3 { width: 170px; }
+  .hero-float-card-1 {
+    width: 220px;
+    left: 20px;
+  }
+  .hero-float-card-2 {
+    width: 190px;
+  }
+  .hero-float-card-3 {
+    width: 170px;
+  }
 
-  .hero-circle-1 { width: 260px; height: 260px; }
+  .hero-circle-1 {
+    width: 260px;
+    height: 260px;
+  }
 
   .task-grid {
     grid-template-columns: 1fr;
