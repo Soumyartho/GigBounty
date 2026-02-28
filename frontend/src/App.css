@@ -645,46 +645,50 @@
 .stats-bar {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-component);
+  gap: var(--space-default);
   padding: var(--space-section) 0;
 }
 
 .stat-item {
-  text-align: left;
-  padding: var(--space-section);
+  text-align: center;
+  padding: 28px 24px;
   background: var(--bg-card);
-  border: 2px solid var(--border-light);
-  border-radius: var(--radius-default);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  transition: border-color 200ms ease;
+}
+
+.stat-item:hover {
+  border-color: var(--border-dark);
 }
 
 .stat-number {
   font-family: var(--font-display);
-  font-size: 40px;
+  font-size: 34px;
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1;
-  margin-bottom: var(--space-micro);
+  margin-bottom: 8px;
 }
 
 .stat-label {
   font-size: 13px;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.02em;
   color: var(--text-muted);
   font-weight: 500;
 }
 
 /* ============================================================
-   HOW IT WORKS SECTION
+   HOW IT WORKS — Infographic Flow
    ============================================================ */
 .how-it-works {
   padding: var(--space-major) 0;
   text-align: center;
-  background-color: #EBE6DD;
-  border-top: 2px solid var(--border-dark);
-  border-bottom: 2px solid var(--border-dark);
+  background-color: var(--bg-primary);
 }
 
 .how-it-works h2 {
@@ -696,20 +700,29 @@
   margin: 0 auto var(--space-section-gap);
 }
 
-.steps-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-component);
+.steps-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.step-flow-group {
+  display: flex;
+  align-items: center;
 }
 
 .step-card {
-  background: var(--bg-primary);
-  border: 2px solid var(--border-light);
-  border-radius: var(--radius-default);
-  padding: var(--space-section);
+  border: 2px solid;
+  border-radius: 16px;
+  padding: 36px 28px;
   text-align: center;
-  position: relative;
-  transition: border-color 300ms ease, box-shadow 300ms ease, transform 300ms ease;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  transition: transform 200ms ease;
 }
 
 .step-card:hover {
@@ -717,29 +730,47 @@
   box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.35), 0 0 24px rgba(163, 230, 53, 0.3), 0 0 48px rgba(163, 230, 53, 0.1);
 }
 
-.step-number {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--accent-green);
-  color: var(--accent-black);
-  display: inline-flex;
+.step-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--text-primary);
+}
+
+.step-icon svg {
+  width: 48px;
+  height: 48px;
+}
+
+.step-label {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 11px;
   font-weight: 700;
-  margin-bottom: var(--space-default);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
 }
 
 .step-card h3 {
   font-size: 18px;
-  margin-bottom: var(--space-tight);
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
 }
 
-.step-card p {
-  font-size: 15px;
-  text-align: center;
+.step-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  opacity: 0.4;
+}
+
+.step-arrow svg {
+  width: 32px;
+  height: 32px;
 }
 
 /* ============================================================
@@ -888,8 +919,21 @@
     grid-template-columns: 1fr;
   }
 
-  .steps-grid {
-    grid-template-columns: 1fr;
+  .steps-flow {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .step-flow-group {
+    flex-direction: column;
+  }
+
+  .step-arrow {
+    transform: rotate(90deg);
+  }
+
+  .step-card {
+    width: 100%;
   }
 
   .stats-bar {
