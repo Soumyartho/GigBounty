@@ -1,30 +1,35 @@
 import { motion } from 'framer-motion';
 import { fadeUp, staggerContainer, cardHover, useScrollRevealProps } from '../lib/motion';
 
-const sectionContainer = staggerContainer(0.12, 0.1);
+const flowContainer = staggerContainer(0.12, 0.1);
 const cardVariant = fadeUp(24);
+
+const ArrowIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.35 }}>
+    <line x1="5" y1="12" x2="19" y2="12" />
+    <polyline points="12 5 19 12 12 19" />
+  </svg>
+);
 
 export default function HowItWorks() {
   const steps = [
     {
-      number: 1,
       label: 'STEP 1',
       title: 'Post & Escrow',
       icon: (
         <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-          <rect x="8" y="6" width="24" height="32" rx="3" stroke="currentColor" strokeWidth="2.5" fill="none" />
-          <line x1="14" y1="14" x2="26" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-          <line x1="14" y1="20" x2="26" y2="20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-          <line x1="14" y1="26" x2="22" y2="26" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-          <rect x="28" y="22" width="14" height="18" rx="2" stroke="currentColor" strokeWidth="2.5" fill="none" />
-          <path d="M32 28 L35 31 L40 26" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <rect x="10" y="8" width="20" height="28" rx="3" stroke="currentColor" strokeWidth="2.5" fill="none" />
+          <line x1="15" y1="15" x2="25" y2="15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          <line x1="15" y1="20" x2="25" y2="20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          <line x1="15" y1="25" x2="22" y2="25" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          <rect x="27" y="24" width="12" height="14" rx="2" stroke="currentColor" strokeWidth="2.5" fill="none" />
+          <path d="M30 29 L33 32 L37 27" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       ),
-      color: '#DBEAFE',
+      bg: '#DBEAFE',
       border: '#93C5FD',
     },
     {
-      number: 2,
       label: 'STEP 2',
       title: 'Claim & Build',
       icon: (
@@ -36,11 +41,10 @@ export default function HowItWorks() {
           <line x1="37" y1="33" x2="37" y2="42" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
       ),
-      color: '#D1FAE5',
+      bg: '#D1FAE5',
       border: '#6EE7B7',
     },
     {
-      number: 3,
       label: 'STEP 3',
       title: 'Verify Proof',
       icon: (
@@ -53,11 +57,10 @@ export default function HowItWorks() {
           <path d="M30 32 L34 36 L42 28" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       ),
-      color: '#EDE9FE',
+      bg: '#EDE9FE',
       border: '#C4B5FD',
     },
     {
-      number: 4,
       label: 'STEP 4',
       title: 'Instant Pay',
       icon: (
@@ -70,7 +73,7 @@ export default function HowItWorks() {
           <path d="M40 29 L40 35 M37 32 L43 32" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
         </svg>
       ),
-      color: '#FEF3C7',
+      bg: '#FEF3C7',
       border: '#FCD34D',
     },
   ];
@@ -81,28 +84,39 @@ export default function HowItWorks() {
     <section className="how-it-works" id="how">
       <div className="container">
         <motion.h2 variants={fadeUp(16)} {...scrollProps}>
-          How It Works
+          From Task to Payment
         </motion.h2>
         <motion.p variants={fadeUp(16)} {...scrollProps}>
-          Trustless micro-task completion in four simple steps, powered by Algorand.
+          Micro-task completion in four simple steps, powered by Algorand.
         </motion.p>
 
         <motion.div
-          className="steps-grid"
-          variants={sectionContainer}
+          className="steps-flow"
+          variants={flowContainer}
           {...scrollProps}
         >
-          {steps.map(step => (
-            <motion.div
-              className="step-card"
-              key={step.number}
-              variants={cardVariant}
-              whileHover={cardHover}
-            >
-              <div className="step-number">{step.number}</div>
-              <h3>{step.title}</h3>
-              <p>{step.description}</p>
-            </motion.div>
+          {steps.map((step, i) => (
+            <div className="step-flow-group" key={step.label}>
+              <motion.div
+                className="step-card"
+                style={{
+                  backgroundColor: step.bg,
+                  borderColor: step.border,
+                }}
+                variants={cardVariant}
+                whileHover={cardHover}
+              >
+                <div className="step-icon">{step.icon}</div>
+                <span className="step-label">{step.label}</span>
+                <h3>{step.title}</h3>
+              </motion.div>
+
+              {i < steps.length - 1 && (
+                <div className="step-arrow">
+                  <ArrowIcon />
+                </div>
+              )}
+            </div>
           ))}
         </motion.div>
       </div>
