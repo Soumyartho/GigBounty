@@ -1,0 +1,1 @@
+# GigBounty smart contracts package
