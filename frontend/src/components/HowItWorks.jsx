@@ -1,3 +1,9 @@
+import { motion } from 'framer-motion';
+import { fadeUp, staggerContainer, cardHover, useScrollRevealProps } from '../lib/motion';
+
+const sectionContainer = staggerContainer(0.12, 0.1);
+const cardVariant = fadeUp(24);
+
 export default function HowItWorks() {
   const steps = [
     {
@@ -22,21 +28,36 @@ export default function HowItWorks() {
     },
   ];
 
+  const scrollProps = useScrollRevealProps();
+
   return (
     <section className="how-it-works" id="how">
       <div className="container">
-        <h2>How It Works</h2>
-        <p>Trustless micro-task completion in four simple steps, powered by Algorand.</p>
+        <motion.h2 variants={fadeUp(16)} {...scrollProps}>
+          How It Works
+        </motion.h2>
+        <motion.p variants={fadeUp(16)} {...scrollProps}>
+          Trustless micro-task completion in four simple steps, powered by Algorand.
+        </motion.p>
 
-        <div className="steps-grid">
+        <motion.div
+          className="steps-grid"
+          variants={sectionContainer}
+          {...scrollProps}
+        >
           {steps.map(step => (
-            <div className="step-card" key={step.number}>
+            <motion.div
+              className="step-card"
+              key={step.number}
+              variants={cardVariant}
+              whileHover={cardHover}
+            >
               <div className="step-number">{step.number}</div>
               <h3>{step.title}</h3>
               <p>{step.description}</p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

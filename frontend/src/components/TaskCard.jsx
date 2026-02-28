@@ -1,8 +1,11 @@
+import { motion, useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { cardHover, buttonHover, buttonTap } from '../lib/motion';
 
 export default function TaskCard({ task, walletAddress, onClaim, onSubmitProof, onApprove }) {
   const { id, title, description, amount, status, creator_wallet, worker_wallet, deadline } = task;
   const navigate = useNavigate();
+  const prefersReduced = useReducedMotion();
 
   const isCreator = walletAddress && creator_wallet === walletAddress;
   const isWorker = walletAddress && worker_wallet === walletAddress;
@@ -24,13 +27,18 @@ export default function TaskCard({ task, walletAddress, onClaim, onSubmitProof, 
   };
 
   const handleCardClick = (e) => {
-    // Don't navigate if clicking a button
     if (e.target.closest('button')) return;
     navigate(`/tasks/${id}`);
   };
 
   return (
-    <div className="task-card" data-status={status} onClick={handleCardClick} style={{ cursor: 'pointer' }}>
+    <motion.div
+      className="task-card"
+      data-status={status}
+      onClick={handleCardClick}
+      style={{ cursor: 'pointer' }}
+      whileHover={prefersReduced ? {} : cardHover}
+    >
       <div className="task-card-header">
         <h3 className="task-card-title">{title}</h3>
         {getStatusBadge()}
@@ -55,21 +63,36 @@ export default function TaskCard({ task, walletAddress, onClaim, onSubmitProof, 
 
       <div className="task-card-footer">
         {status === 'OPEN' && !isCreator && walletAddress && (
-          <button className="btn btn-primary" onClick={() => onClaim?.(id)}>
+          <motion.button
+            className="btn btn-primary"
+            onClick={() => onClaim?.(id)}
+            whileHover={prefersReduced ? {} : buttonHover}
+            whileTap={prefersReduced ? {} : buttonTap}
+          >
             Claim Task
-          </button>
+          </motion.button>
         )}
 
         {status === 'CLAIMED' && isWorker && (
-          <button className="btn btn-primary" onClick={() => onSubmitProof?.(id)}>
+          <motion.button
+            className="btn btn-primary"
+            onClick={() => onSubmitProof?.(id)}
+            whileHover={prefersReduced ? {} : buttonHover}
+            whileTap={prefersReduced ? {} : buttonTap}
+          >
             Submit Proof
-          </button>
+          </motion.button>
         )}
 
         {status === 'SUBMITTED' && isCreator && (
-          <button className="btn btn-primary" onClick={() => onApprove?.(id)}>
+          <motion.button
+            className="btn btn-primary"
+            onClick={() => onApprove?.(id)}
+            whileHover={prefersReduced ? {} : buttonHover}
+            whileTap={prefersReduced ? {} : buttonTap}
+          >
             Approve & Pay
-          </button>
+          </motion.button>
         )}
 
         {status === 'OPEN' && isCreator && (
@@ -84,6 +107,6 @@ export default function TaskCard({ task, walletAddress, onClaim, onSubmitProof, 
           </span>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

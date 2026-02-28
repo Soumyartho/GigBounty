@@ -1,19 +1,50 @@
+import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { motion, useReducedMotion } from 'framer-motion';
+import { EASE, DURATION, fadeIn, buttonHover, buttonTap } from '../lib/motion';
 
-export default function Navbar({
-  walletAddress,
-  onConnect,
-  onDisconnect,
-}) {
+const navVariant = {
+  hidden: { opacity: 0, y: -12 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: DURATION.medium, ease: EASE },
+  },
+};
+
+export default function Navbar({ walletAddress, onConnect, onDisconnect }) {
   const navigate = useNavigate();
+  const prefersReduced = useReducedMotion();
+  const [scrolled, setScrolled] = useState(false);
+
+  // Track scroll for subtle background opacity change
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const truncateAddress = (addr) => {
     if (!addr) return '';
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   };
 
+  const motionProps = prefersReduced
+    ? {}
+    : { initial: 'hidden', animate: 'visible', variants: navVariant };
+
   return (
-    <nav className="navbar">
+    <motion.nav
+      className="navbar"
+      {...motionProps}
+      style={{
+        backdropFilter: scrolled ? 'blur(8px)' : 'none',
+        backgroundColor: scrolled
+          ? 'rgba(244, 239, 231, 0.92)'
+          : 'var(--bg-primary)',
+        transition: 'background-color 0.3s ease, backdrop-filter 0.3s ease',
+      }}
+    >
       <div className="navbar-inner">
         <NavLink to="/" className="navbar-logo">
           <div className="navbar-logo-icon">⚡</div>
@@ -47,25 +78,28 @@ export default function Navbar({
                 <span className="navbar-wallet-dot"></span>
                 {truncateAddress(walletAddress)}
               </div>
-              <button
+              <motion.button
                 className="btn btn-secondary"
                 onClick={onDisconnect}
-                style={{
-                  padding: '8px 16px',
-                  minHeight: '36px',
-                  fontSize: '12px',
-                }}
+                style={{ padding: '8px 16px', minHeight: '36px', fontSize: '12px' }}
+                whileHover={prefersReduced ? {} : buttonHover}
+                whileTap={prefersReduced ? {} : buttonTap}
               >
                 Disconnect
-              </button>
+              </motion.button>
             </>
           ) : (
-            <button className="btn btn-primary" onClick={onConnect}>
+            <motion.button
+              className="btn btn-primary"
+              onClick={onConnect}
+              whileHover={prefersReduced ? {} : buttonHover}
+              whileTap={prefersReduced ? {} : buttonTap}
+            >
               Connect Wallet
-            </button>
+            </motion.button>
           )}
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 }

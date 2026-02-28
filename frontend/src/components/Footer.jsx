@@ -1,6 +1,13 @@
+import { motion } from 'framer-motion';
+import { fadeUp, useScrollRevealProps } from '../lib/motion';
+
+const footerVariant = fadeUp(12, 0.6);
+
 export default function Footer() {
+  const scrollProps = useScrollRevealProps();
+
   return (
-    <footer className="footer">
+    <motion.footer className="footer" variants={footerVariant} {...scrollProps}>
       <div className="footer-inner">
         <span className="footer-text">
           © 2026 GigBounty — Decentralized Micro-Task Bounty Board
@@ -18,6 +25,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   );
 }

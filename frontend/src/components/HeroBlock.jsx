@@ -1,37 +1,93 @@
+import { motion } from 'framer-motion';
+import {
+  EASE, DURATION, STAGGER,
+  staggerContainer, fadeUp,
+  buttonHover, buttonTap,
+  floatLoop, useMotionProps,
+} from '../lib/motion';
+
+// Hero-specific orchestrator — slightly slower stagger for cinematic feel
+const heroContainer = staggerContainer(STAGGER.slow, 0.15);
+
+// Visual entrance — scale + fade
+const visualVariant = {
+  hidden: { opacity: 0, scale: 0.97, y: 16 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: DURATION.slow, ease: EASE, delay: 0.4 },
+  },
+};
+
+// Button-level stagger
+const buttonContainer = staggerContainer(STAGGER.fast, 0.05);
+
+// Shared entrance for buttons
+const btnVariant = fadeUp(14, DURATION.medium);
+
 export default function HeroBlock({ onGetStarted, onLearnMore }) {
+  const motionProps = useMotionProps();
+
   return (
     <section className="hero">
-      <div className="hero-inner">
+      <motion.div
+        className="hero-inner"
+        variants={heroContainer}
+        {...motionProps}
+      >
+        {/* Left — Text */}
         <div className="hero-content">
-          <h1>Decentralized Micro-Task Bounty Board</h1>
-          <p>
-            Post tasks, lock ALGO in escrow, and pay workers instantly on completion.
-            Powered by Algorand blockchain with optional AI verification.
-          </p>
-          <div className="hero-actions">
-            <button className="btn btn-primary" onClick={onGetStarted} style={{ padding: '16px 40px', fontSize: '16px' }}>
+          <motion.h1 variants={fadeUp(22, DURATION.slow)}>
+            Decentralized Micro-Task Bounty Board
+          </motion.h1>
+
+          <motion.p variants={fadeUp(20, DURATION.medium)}>
+            Post tasks, lock ALGO in escrow, and pay workers instantly on
+            completion. Powered by Algorand blockchain with optional AI
+            verification.
+          </motion.p>
+
+          <motion.div className="hero-actions" variants={buttonContainer}>
+            <motion.button
+              className="btn btn-primary"
+              onClick={onGetStarted}
+              style={{ padding: '16px 40px', fontSize: '16px' }}
+              variants={btnVariant}
+              whileHover={buttonHover}
+              whileTap={buttonTap}
+            >
               Post a Bounty
-            </button>
-            <button className="btn btn-secondary" onClick={onLearnMore}>
+            </motion.button>
+            <motion.button
+              className="btn btn-secondary"
+              onClick={onLearnMore}
+              variants={btnVariant}
+              whileHover={buttonHover}
+              whileTap={buttonTap}
+            >
               Learn More
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         </div>
 
-        <div className="hero-visual">
-          <img
+        {/* Right — Floating illustration */}
+        <motion.div className="hero-visual" variants={visualVariant}>
+          <motion.img
             src="/ProjectMedia/Work From Home 2.png"
             alt="GigBounty - Decentralized Freelancing"
+            animate={floatLoop(8, 6)}
             style={{
               width: '100%',
               maxWidth: '500px',
               height: 'auto',
               borderRadius: 'var(--radius-lg)',
               objectFit: 'contain',
+              willChange: 'transform',
             }}
           />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

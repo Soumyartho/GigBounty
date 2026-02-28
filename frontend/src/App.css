@@ -118,23 +118,18 @@
 
 .hero-content h1 {
   margin-bottom: var(--space-default);
-  animation: fadeUp 600ms ease forwards;
 }
 
 .hero-content p {
   font-size: 20px;
   line-height: 1.7;
   margin-bottom: var(--space-section);
-  animation: fadeUp 600ms ease 100ms forwards;
-  opacity: 0;
 }
 
 .hero-actions {
   display: flex;
   gap: var(--space-default);
   flex-wrap: wrap;
-  animation: fadeUp 600ms ease 200ms forwards;
-  opacity: 0;
 }
 
 .hero-visual {
@@ -142,8 +137,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: fadeUp 600ms ease 300ms forwards;
-  opacity: 0;
 }
 
 /* Organic background circles */
@@ -238,9 +231,11 @@
 .hero-float-card .card-line:nth-child(1) {
   width: 60%;
 }
+
 .hero-float-card .card-line:nth-child(2) {
   width: 90%;
 }
+
 .hero-float-card .card-line:nth-child(3) {
   width: 45%;
   background: var(--accent-green);
@@ -340,7 +335,7 @@
   transform: scale(1.15);
   border-color: var(--accent-green);
   box-shadow: 0 0 0 4px rgba(163, 230, 53, 0.2),
-              0 0 20px rgba(163, 230, 53, 0.15);
+    0 0 20px rgba(163, 230, 53, 0.15);
   color: var(--text-primary);
 }
 
@@ -363,7 +358,7 @@
 
 .stepper-step.active:hover .stepper-circle {
   box-shadow: 0 0 0 6px rgba(163, 230, 53, 0.3),
-              0 0 24px rgba(163, 230, 53, 0.25);
+    0 0 24px rgba(163, 230, 53, 0.25);
 }
 
 /* Completed state */
@@ -375,7 +370,7 @@
 
 .stepper-step.completed:hover .stepper-circle {
   box-shadow: 0 0 0 4px rgba(17, 17, 17, 0.15),
-              0 0 20px rgba(17, 17, 17, 0.1);
+    0 0 20px rgba(17, 17, 17, 0.1);
 }
 
 /* Label */
@@ -490,7 +485,6 @@
 }
 
 .task-card:hover {
-  transform: translateY(-4px);
   border-color: var(--border-dark);
 }
 
@@ -580,12 +574,15 @@
 .task-card[data-status="OPEN"]::before {
   background: var(--accent-green);
 }
+
 .task-card[data-status="CLAIMED"]::before {
   background: var(--accent-blue);
 }
+
 .task-card[data-status="SUBMITTED"]::before {
   background: var(--accent-yellow);
 }
+
 .task-card[data-status="COMPLETED"]::before {
   background: var(--accent-coral);
 }
@@ -619,7 +616,7 @@
   z-index: 0;
 }
 
-.post-task-card > * {
+.post-task-card>* {
   position: relative;
   z-index: 1;
 }
@@ -694,7 +691,7 @@
   margin-bottom: var(--space-default);
 }
 
-.how-it-works > .container > p {
+.how-it-works>.container>p {
   max-width: 600px;
   margin: 0 auto var(--space-section-gap);
 }
@@ -718,7 +715,6 @@
 .step-card:hover {
   border-color: rgba(163, 230, 53, 0.8);
   box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.35), 0 0 24px rgba(163, 230, 53, 0.3), 0 0 48px rgba(163, 230, 53, 0.1);
-  transform: translateY(-3px);
 }
 
 .step-number {
@@ -874,9 +870,11 @@
     width: 220px;
     left: 20px;
   }
+
   .hero-float-card-2 {
     width: 190px;
   }
+
   .hero-float-card-3 {
     width: 170px;
   }

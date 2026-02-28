@@ -1,3 +1,10 @@
+import { motion } from 'framer-motion';
+import {
+  EASE, DURATION, STAGGER,
+  staggerContainer, scaleIn,
+  useScrollRevealProps,
+} from '../lib/motion';
+
 const STEPS = [
   {
     label: 'Post',
@@ -48,11 +55,14 @@ const STATUS_TO_STEP = {
   'COMPLETED': 4,
 };
 
+const stepperContainer = staggerContainer(0.1, 0.2);
+
 export default function StepperHorizontal({ status = 'OPEN' }) {
   const currentStep = STATUS_TO_STEP[status] ?? 0;
+  const scrollProps = useScrollRevealProps();
 
   return (
-    <div className="stepper">
+    <motion.div className="stepper" variants={stepperContainer} {...scrollProps}>
       {STEPS.map((step, index) => {
         const isCompleted = index < currentStep;
         const isActive = index === currentStep;
@@ -60,7 +70,10 @@ export default function StepperHorizontal({ status = 'OPEN' }) {
 
         return (
           <div key={step.label} className="stepper-item">
-            <div className={`stepper-step ${stepClass}`}>
+            <motion.div
+              className={`stepper-step ${stepClass}`}
+              variants={scaleIn(index * 0.08)}
+            >
               <div className="stepper-circle">
                 <span className="stepper-icon">
                   {isCompleted ? (
@@ -73,7 +86,7 @@ export default function StepperHorizontal({ status = 'OPEN' }) {
                 </span>
               </div>
               <span className="stepper-label">{step.label}</span>
-            </div>
+            </motion.div>
             {index < STEPS.length - 1 && (
               <div className={`stepper-connector ${isCompleted ? 'completed' : ''}`}>
                 <div className="stepper-connector-fill" />
@@ -82,6 +95,6 @@ export default function StepperHorizontal({ status = 'OPEN' }) {
           </div>
         );
       })}
-    </div>
+    </motion.div>
   );
 }

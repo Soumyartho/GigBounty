@@ -1,11 +1,18 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import TaskCard from './TaskCard';
 import SkeletonLoader from './SkeletonLoader';
+import { fadeUp, staggerContainer, useScrollRevealProps, buttonHover, buttonTap } from '../lib/motion';
+import { useReducedMotion } from 'framer-motion';
 
 const FILTERS = ['All', 'Open', 'Claimed', 'Submitted', 'Completed'];
+const gridContainer = staggerContainer(0.08);
+const cardVariant = fadeUp(20);
 
 export default function TaskBoard({ tasks, loading, walletAddress, onClaim, onSubmitProof, onApprove }) {
   const [activeFilter, setActiveFilter] = useState('All');
+  const scrollProps = useScrollRevealProps();
+  const prefersReduced = useReducedMotion();
 
   const filteredTasks = activeFilter === 'All'
     ? tasks
@@ -14,7 +21,11 @@ export default function TaskBoard({ tasks, loading, walletAddress, onClaim, onSu
   return (
     <section className="task-board" id="tasks">
       <div className="container">
-        <div className="task-board-header">
+        <motion.div
+          className="task-board-header"
+          variants={fadeUp(16)}
+          {...scrollProps}
+        >
           <div>
             <h2>Bounty Board</h2>
             <p className="text-small" style={{ marginTop: '4px' }}>
@@ -24,18 +35,24 @@ export default function TaskBoard({ tasks, loading, walletAddress, onClaim, onSu
 
           <div className="task-board-filters">
             {FILTERS.map(filter => (
-              <button
+              <motion.button
                 key={filter}
                 className={`filter-btn ${activeFilter === filter ? 'active' : ''}`}
                 onClick={() => setActiveFilter(filter)}
+                whileHover={prefersReduced ? {} : buttonHover}
+                whileTap={prefersReduced ? {} : buttonTap}
               >
                 {filter}
-              </button>
+              </motion.button>
             ))}
           </div>
-        </div>
+        </motion.div>
 
-        <div className="task-grid">
+        <motion.div
+          className="task-grid"
+          variants={gridContainer}
+          {...scrollProps}
+        >
           {loading ? (
             <>
               <SkeletonLoader type="card" />
@@ -47,14 +64,15 @@ export default function TaskBoard({ tasks, loading, walletAddress, onClaim, onSu
             </>
           ) : filteredTasks.length > 0 ? (
             filteredTasks.map(task => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                walletAddress={walletAddress}
-                onClaim={onClaim}
-                onSubmitProof={onSubmitProof}
-                onApprove={onApprove}
-              />
+              <motion.div key={task.id} variants={cardVariant}>
+                <TaskCard
+                  task={task}
+                  walletAddress={walletAddress}
+                  onClaim={onClaim}
+                  onSubmitProof={onSubmitProof}
+                  onApprove={onApprove}
+                />
+              </motion.div>
             ))
           ) : (
             <div className="empty-state">
@@ -67,7 +85,7 @@ export default function TaskBoard({ tasks, loading, walletAddress, onClaim, onSu
               </p>
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
