@@ -108,7 +108,12 @@ a:hover {
 /* ============================================================
    TYPOGRAPHY SYSTEM
    ============================================================ */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display);
   line-height: 1.2;
   color: var(--text-primary);
@@ -160,7 +165,7 @@ p {
   padding: 12px 32px;
   min-height: 48px;
   border-radius: var(--radius-default);
-  font-family: var(--font-body);
+  font-family: var(--font-display);
   font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
@@ -194,18 +199,18 @@ p {
   background-color: #95d42e;
 }
 
-/* Secondary — Solid green, matching filter button style */
+/* Secondary — Black fill, lime green text */
 .btn-secondary {
-  background-color: #A3E635;
-  color: #000000;
-  border: 1px solid #A3E635;
+  background-color: var(--accent-black);
+  color: var(--accent-green);
+  border: 1px solid var(--accent-black);
 }
 
 .btn-secondary:hover {
-  background-color: #95d42e;
-  color: #000000;
-  border-color: #95d42e;
-  box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.45), 0 0 12px rgba(163, 230, 53, 0.3);
+  background-color: #1a1a1a;
+  color: var(--accent-green);
+  border-color: #1a1a1a;
+  box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.2), 0 0 12px rgba(17, 17, 17, 0.15);
 }
 
 /* Tertiary — Text-only, underline on hover */
@@ -389,17 +394,20 @@ p {
    SKELETON LOADER (No spinners — design.md rule)
    ============================================================ */
 @keyframes skeleton-shimmer {
-  0% { background-position: -200px 0; }
-  100% { background-position: calc(200px + 100%) 0; }
+  0% {
+    background-position: -200px 0;
+  }
+
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
 }
 
 .skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--bg-primary) 0px,
-    #ebe6dd 40px,
-    var(--bg-primary) 80px
-  );
+  background: linear-gradient(90deg,
+      var(--bg-primary) 0px,
+      #ebe6dd 40px,
+      var(--bg-primary) 80px);
   background-size: 200px 100%;
   animation: skeleton-shimmer 1.5s ease-in-out infinite;
   border-radius: var(--radius-default);
@@ -525,8 +533,13 @@ p {
    ANIMATIONS
    ============================================================ */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
@@ -534,6 +547,7 @@ p {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -545,6 +559,7 @@ p {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -579,6 +594,7 @@ p {
    ACCESSIBILITY — Reduced Motion
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -592,17 +608,39 @@ p {
    RESPONSIVE TYPOGRAPHY
    ============================================================ */
 @media (max-width: 1023px) {
-  h1 { font-size: 44px; }
-  h2 { font-size: 34px; }
-  h3 { font-size: 26px; }
+  h1 {
+    font-size: 44px;
+  }
+
+  h2 {
+    font-size: 34px;
+  }
+
+  h3 {
+    font-size: 26px;
+  }
 }
 
 @media (max-width: 767px) {
-  body { font-size: 16px; }
-  h1 { font-size: 40px; }
-  h2 { font-size: 32px; }
-  h3 { font-size: 24px; }
-  p { font-size: 16px; }
+  body {
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: 40px;
+  }
+
+  h2 {
+    font-size: 32px;
+  }
+
+  h3 {
+    font-size: 24px;
+  }
+
+  p {
+    font-size: 16px;
+  }
 
   .container {
     padding: 0 24px;
