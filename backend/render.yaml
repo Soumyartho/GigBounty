@@ -13,7 +13,7 @@ services:
         value: "true"
       - key: ESCROW_MNEMONIC
         sync: false # Set manually in Render dashboard
-      - key: GROQ_API_KEY
+      - key: GEMINI_API_KEY
         sync: false # Set manually in Render dashboard
       - key: CORS_ORIGINS
         sync: false # Set to your Vercel frontend URL
