@@ -648,33 +648,39 @@
 .stats-bar {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-component);
+  gap: var(--space-default);
   padding: var(--space-section) 0;
 }
 
 .stat-item {
-  text-align: left;
-  padding: var(--space-section);
+  text-align: center;
+  padding: 28px 24px;
   background: var(--bg-card);
-  border: 2px solid var(--border-light);
-  border-radius: var(--radius-default);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  transition: border-color 200ms ease;
+}
+
+.stat-item:hover {
+  border-color: var(--border-dark);
 }
 
 .stat-number {
   font-family: var(--font-display);
-  font-size: 40px;
+  font-size: 34px;
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1;
-  margin-bottom: var(--space-micro);
+  margin-bottom: 8px;
 }
 
 .stat-label {
   font-size: 13px;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.02em;
   color: var(--text-muted);
   font-weight: 500;
 }
