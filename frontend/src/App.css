@@ -299,64 +299,130 @@
   padding: var(--space-component) 0;
 }
 
+.stepper-item {
+  display: flex;
+  align-items: center;
+}
+
 .stepper-step {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-tight);
+  gap: 10px;
   position: relative;
+  cursor: default;
 }
 
 .stepper-circle {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  border: 2px solid var(--accent-black);
+  border: 2px solid var(--border-light);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  font-weight: 700;
   background: var(--bg-card);
-  color: var(--text-primary);
-  transition: all var(--transition-fast);
-}
-
-.stepper-step.active .stepper-circle {
-  background-color: var(--accent-green);
-  border-color: var(--accent-green);
-}
-
-.stepper-step.completed .stepper-circle {
-  background-color: var(--accent-coral);
-  border-color: var(--accent-coral);
-  color: white;
-}
-
-.stepper-label {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
   color: var(--text-muted);
-  font-weight: 500;
-  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  z-index: 1;
 }
 
-.stepper-step.active .stepper-label,
+.stepper-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Hover — haptic pulse */
+.stepper-step:hover .stepper-circle {
+  transform: scale(1.15);
+  border-color: var(--accent-green);
+  box-shadow: 0 0 0 4px rgba(163, 230, 53, 0.2),
+              0 0 20px rgba(163, 230, 53, 0.15);
+  color: var(--text-primary);
+}
+
+.stepper-step:hover .stepper-icon {
+  transform: scale(1.1);
+}
+
+.stepper-step:hover .stepper-label {
+  color: var(--text-primary);
+  letter-spacing: 0.14em;
+}
+
+/* Active state */
+.stepper-step.active .stepper-circle {
+  background: var(--accent-green);
+  border-color: var(--accent-green);
+  color: var(--accent-black);
+  box-shadow: 0 0 0 4px rgba(163, 230, 53, 0.25);
+}
+
+.stepper-step.active:hover .stepper-circle {
+  box-shadow: 0 0 0 6px rgba(163, 230, 53, 0.3),
+              0 0 24px rgba(163, 230, 53, 0.25);
+}
+
+/* Completed state */
+.stepper-step.completed .stepper-circle {
+  background: var(--accent-black);
+  border-color: var(--accent-black);
+  color: var(--accent-green);
+}
+
+.stepper-step.completed:hover .stepper-circle {
+  box-shadow: 0 0 0 4px rgba(17, 17, 17, 0.15),
+              0 0 20px rgba(17, 17, 17, 0.1);
+}
+
+/* Label */
+.stepper-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.stepper-step.active .stepper-label {
+  color: var(--accent-black);
+  font-weight: 700;
+}
+
 .stepper-step.completed .stepper-label {
   color: var(--text-primary);
 }
 
+/* Connector line */
 .stepper-connector {
-  width: 60px;
-  height: 4px;
-  background-color: var(--border-light);
-  margin: 0 var(--space-tight);
-  margin-bottom: 24px;
+  width: 56px;
+  height: 3px;
+  background: var(--border-light);
+  margin: 0 6px;
+  margin-bottom: 28px;
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
 }
 
-.stepper-connector.completed {
-  background-color: var(--accent-coral);
+.stepper-connector-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  background: var(--accent-black);
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+.stepper-connector.completed .stepper-connector-fill {
+  width: 100%;
 }
 
 /* ============================================================
