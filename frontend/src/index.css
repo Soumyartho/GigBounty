@@ -240,11 +240,13 @@ p {
   border: 1px solid var(--border-light);
   border-radius: var(--radius-default);
   padding: var(--space-component);
-  transition: transform var(--transition-fast);
+  transition: transform 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
 }
 
 .card:hover {
   transform: scale(1.01);
+  border-color: rgba(163, 230, 53, 0.6);
+  box-shadow: 0 0 0 2px rgba(163, 230, 53, 0.2), 0 0 16px rgba(163, 230, 53, 0.15);
 }
 
 /* ============================================================

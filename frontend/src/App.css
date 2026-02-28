@@ -402,12 +402,14 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-default);
-  transition: transform var(--transition-fast);
+  transition: transform 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
   position: relative;
 }
 
 .task-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  border-color: rgba(163, 230, 53, 0.6);
+  box-shadow: 0 0 0 2px rgba(163, 230, 53, 0.2), 0 0 20px rgba(163, 230, 53, 0.15);
 }
 
 .task-card-header {
@@ -574,6 +576,14 @@
   background: var(--bg-card);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-default);
+  transition: border-color 300ms ease, box-shadow 300ms ease, transform 300ms ease;
+  cursor: default;
+}
+
+.stat-item:hover {
+  border-color: rgba(163, 230, 53, 0.6);
+  box-shadow: 0 0 0 2px rgba(163, 230, 53, 0.2), 0 0 16px rgba(163, 230, 53, 0.15);
+  transform: translateY(-2px);
 }
 
 .stat-number {
@@ -623,6 +633,13 @@
   padding: var(--space-section);
   text-align: center;
   position: relative;
+  transition: border-color 300ms ease, box-shadow 300ms ease, transform 300ms ease;
+}
+
+.step-card:hover {
+  border-color: rgba(163, 230, 53, 0.6);
+  box-shadow: 0 0 0 2px rgba(163, 230, 53, 0.2), 0 0 16px rgba(163, 230, 53, 0.15);
+  transform: translateY(-2px);
 }
 
 .step-number {
