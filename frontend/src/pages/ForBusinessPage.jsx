@@ -22,10 +22,10 @@ export default function ForBusinessPage() {
             Integrate <span className="text-highlight">GigBounty</span> Into Your Platform
           </motion.h1>
           <motion.p className="about-hero-subtitle" variants={fadeUp(20)} {...scrollProps}>
-            Reduce fraud, automate verification, and handle payments through blockchain — 
+            Reduce fraud, automate verification, and handle payments through blockchain —
             all via a simple plugin your developers can integrate in hours.
           </motion.p>
-          <motion.div style={{ display: 'flex', gap: '16px', marginTop: '32px' }} variants={fadeUp(24)} {...scrollProps}>
+          <motion.div style={{ display: 'flex', gap: '16px', marginTop: '32px', justifyContent: 'center' }} variants={fadeUp(24)} {...scrollProps}>
             <motion.button className="btn btn-primary" whileHover={prefersReduced ? {} : buttonHover} whileTap={prefersReduced ? {} : buttonTap}>
               Request Demo
             </motion.button>

@@ -1,0 +1,127 @@
+# GigBounty — Blockchain Escrow Audit & Plugin Feasibility
+
+## 1. Current Escrow Status — What's Built vs What's Missing
+
+### ✅ What IS Working
+
+| Feature | Status | Details |
+|---------|--------|---------|
+| Escrow wallet exists | ✅ | Real Algorand TestNet wallet configured via mnemonic in [.env](file:///c:/Users/archi/OneDrive/Desktop/GigBounty/backend/.env) |
+| Deposit (user → escrow) | ✅ | Frontend builds `PaymentTxn` via `algosdk`, signed via Pera Wallet, submitted to TestNet |
+| Payout (escrow → worker) | ✅ | Backend [release_payment()](file:///c:/Users/archi/OneDrive/Desktop/GigBounty/backend/escrow.py#104-172) signs `PaymentTxn` with escrow private key and sends to worker |
+| 3% platform fee | ✅ | Fee deducted before payout in [escrow.py](file:///c:/Users/archi/OneDrive/Desktop/GigBounty/backend/escrow.py) line 132-133 |
+| AI verification (opt.) | ✅ | Groq LLaMA auto-approves proofs (if API key configured) |
+| Demo fallback | ✅ | App works fully without blockchain in demo mode |
+| TestNet test script | ✅ | [test_escrow_deposit.py](file:///c:/Users/archi/OneDrive/Desktop/GigBounty/backend/test_escrow_deposit.py) tests real end-to-end deposit flow |
+| Balance checking | ✅ | [get_escrow_balance()](file:///c:/Users/archi/OneDrive/Desktop/GigBounty/backend/escrow.py#174-187) and frontend [getBalance()](file:///c:/Users/archi/OneDrive/Desktop/GigBounty/frontend/src/services/algorand.js#83-98) query Algod |
+
+### ❌ Critical Gaps
+
+| Gap | Severity | Description |
+|-----|----------|-------------|
+| **No real tx verification** | 🔴 CRITICAL | [verify_payment()](file:///c:/Users/archi/OneDrive/Desktop/GigBounty/backend/escrow.py#56-102) in [escrow.py:56-101](file:///c:/Users/archi/OneDrive/Desktop/GigBounty/backend/escrow.py#L56-L101) just checks `client.account_info(escrow_addr)` — it never actually verifies the `tx_id` on-chain (doesn't check amount, sender, or receiver) |
+| **No smart contract** | 🔴 CRITICAL | This is a **custodial escrow** — the backend holds the private key. There's no on-chain logic preventing the operator from draining funds. For a plugin used by third parties, this is a dealbreaker |
+| **No refund mechanism** | 🟡 HIGH | If a task is never claimed or the worker abandons it, the creator's ALGO is locked forever with no way to refund |
+| **No dispute flow** | 🟡 HIGH | No `DISPUTED` or `EXPIRED` status. If creator refuses to approve valid work, worker has no recourse |
+| **No API auth** | 🟡 HIGH | Any user can call ANY endpoint — approve someone else's task, release someone else's payment. No wallet signature verification on mutations |
+| **JSON file database** | 🟡 HIGH | [tasks_db.json](file:///c:/Users/archi/OneDrive/Desktop/GigBounty/backend/tasks_db.json) is a flat file — no concurrent access safety, no persistence guarantees, single-server only |
+| **No double-spend protection** | 🟡 HIGH | A creator could submit a fake `tx_id` and the backend would still create the task (demo mode bypass in [verify_payment](file:///c:/Users/archi/OneDrive/Desktop/GigBounty/backend/escrow.py#56-102)) |
+| **Escrow mnemonic in .env** | 🟠 MEDIUM | Private key sitting in a text file on disk. Acceptable for hackathon, not for production |
+| **`Buffer` used in browser** | 🟠 MEDIUM | [algorand.js:62](file:///c:/Users/archi/OneDrive/Desktop/GigBounty/frontend/src/services/algorand.js#L62) uses Node.js `Buffer` — works via Vite polyfill but fragile |
+
+---
+
+## 2. Is the Blockchain Payment Lock Proper?
+
+**Short answer: No — it's a hackathon MVP, not a production escrow.**
+
+### What "proper" looks like vs what exists:
+
+```
+PROPER ESCROW (Smart Contract):
+  1. User sends ALGO to a smart contract address
+  2. Contract logic enforces: only release if both parties agree OR timeout
+  3. Funds are trustlessly locked — nobody can steal them
+  4. Refund happens automatically on timeout
+  5. On-chain verifiable by anyone
+
+CURRENT ESCROW (Custodial Wallet):
+  1. User sends ALGO to a regular wallet controlled by the backend
+  2. Backend Python code decides when to release
+  3. Backend operator could drain the wallet at any time
+  4. No refund mechanism exists
+  5. No on-chain enforcement beyond standard payments
+```
+
+### The verify_payment() problem
+
+The current verification is essentially a no-op:
+```python
+# escrow.py line 74-81: Claims to verify but doesn't
+if tx_id:
+    info = client.account_info(escrow_addr)  # Just checks if escrow exists
+    return {"verified": True, ...}           # Always says "verified" ✓
+```
+
+A proper verification would:
+1. Fetch the transaction by `tx_id` using the Indexer
+2. Verify `sender == creator_wallet`
+3. Verify `receiver == escrow_address`
+4. Verify `amount >= task.amount`
+5. Verify the tx is confirmed (not pending)
+
+---
+
+## 3. Plugin / Embeddable Widget — Is It Feasible?
+
+### Can you build it? Yes. Should you build it now? Not yet.
+
+**Prerequisites before building a plugin:**
+
+| Requirement | Current State | Needed |
+|-------------|--------------|--------|
+| Trustless escrow | ❌ Custodial wallet | Smart contract (PyTEAL/Beaker) |
+| Real tx verification | ❌ No-op | Algorand Indexer queries |
+| API authentication | ❌ Open to anyone | Wallet signature auth (EIP-4361 style) |
+| Multi-tenant support | ❌ Single instance | Partner API keys, fee splits |
+| Database | ❌ JSON file | PostgreSQL or Firebase |
+| CORS/domain whitelisting | ❌ Wildcard * | Per-partner origin config |
+| Embeddable JS SDK | ❌ Doesn't exist | Lightweight `<script>` tag SDK |
+| Documentation | ❌ None | API docs, integration guides |
+
+### What the plugin architecture would look like:
+
+```
+Third-party website
+  └── <script src="gigbounty-widget.js">
+        └── iframe / Web Component
+              ├── Pera Wallet Connect (client-side)
+              ├── Task creation UI
+              ├── Escrow deposit flow
+              └── GigBounty API calls ──→ Backend
+                                           ├── Smart Contract escrow
+                                           ├── Real tx verification
+                                           └── Payment release
+```
+
+---
+
+## 4. Recommended Next Steps (In Priority Order)
+
+### Phase 1: Fix Critical Escrow Gaps (Before Plugin)
+1. **Implement real tx verification** — Use Algorand Indexer to validate `tx_id` on-chain
+2. **Add refund/cancel mechanism** — Allow creators to reclaim ALGO from unclaimed/expired tasks
+3. **Add API authorization** — Verify wallet signatures on all mutating endpoints
+4. **Replace JSON database** — Move to SQLite at minimum, PostgreSQL for production
+
+### Phase 2: Smart Contract Escrow (Required for Plugin Trust)
+5. **Write a PyTEAL escrow contract** — On-chain logic that locks funds with multi-sig release conditions
+6. **Add dispute resolution** — `DISPUTED` status + timeout-based auto-refund
+
+### Phase 3: Build the Plugin
+7. **Create embeddable JS SDK** — Lightweight widget that other sites can embed
+8. **Multi-tenant API** — Partner API keys, per-partner fee configuration
+9. **Documentation** — Integration guide for freelancing platforms
+
+> [!IMPORTANT]
+> The current codebase is a solid **hackathon demo** that demonstrates the flow correctly. But the escrow is not trustless — it's just a regular Algorand wallet controlled by your backend. For a plugin that other freelancing websites would trust with their users' money, you need a smart contract.

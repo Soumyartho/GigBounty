@@ -365,25 +365,7 @@ function App() {
         />
       )}
 
-      {/* Demo mode indicator */}
-      {useDemo && (
-        <div style={{
-          position: 'fixed',
-          bottom: '16px',
-          left: '16px',
-          padding: '8px 16px',
-          background: 'var(--accent-yellow)',
-          color: 'var(--accent-black)',
-          borderRadius: 'var(--radius-pill)',
-          fontSize: '12px',
-          fontWeight: 600,
-          textTransform: 'uppercase',
-          letterSpacing: '0.06em',
-          zIndex: 1000,
-        }}>
-          ⚡ Demo Mode — Backend Not Connected
-        </div>
-      )}
+
     </>
   );
 }

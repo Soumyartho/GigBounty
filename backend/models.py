@@ -9,6 +9,12 @@ class TaskStatus(str, Enum):
     CLAIMED = "CLAIMED"
     SUBMITTED = "SUBMITTED"
     COMPLETED = "COMPLETED"
+    CANCELLED = "CANCELLED"
+    EXPIRED = "EXPIRED"
+    DISPUTED = "DISPUTED"
+
+
+# ─── Request Models ──────────────────────────────────────────
 
 
 class TaskCreate(BaseModel):
@@ -39,6 +45,22 @@ class TaskRelease(BaseModel):
     task_id: str
 
 
+class TaskCancel(BaseModel):
+    """Cancel an open/unclaimed task and refund the creator."""
+    task_id: str
+    caller_wallet: str = Field(..., min_length=10)
+
+
+class TaskDispute(BaseModel):
+    """Raise a dispute on a submitted task."""
+    task_id: str
+    caller_wallet: str = Field(..., min_length=10)
+    reason: str = Field(..., min_length=5, max_length=1000)
+
+
+# ─── Response Models ─────────────────────────────────────────
+
+
 class TaskResponse(BaseModel):
     id: str
     title: str
@@ -51,6 +73,8 @@ class TaskResponse(BaseModel):
     created_at: str
     deadline: Optional[str] = None
     tx_id: Optional[str] = None
+    dispute_reason: Optional[str] = None
+    disputed_by: Optional[str] = None
 
 
 class AIVerifyResponse(BaseModel):
