@@ -6,7 +6,7 @@ import SubmitProofModal from './components/SubmitProofModal';
 import Footer from './components/Footer';
 import Toast from './components/Toast';
 import useWallet from './hooks/useWallet';
-import { api } from './services/api';
+import { api, setWalletAddress } from './services/api';
 import { buildEscrowPayment, submitTransaction, getEscrowAddress } from './services/algorand';
 
 // Pages
@@ -130,6 +130,11 @@ function App() {
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
   };
+
+  // Sync wallet address with API auth layer
+  useEffect(() => {
+    setWalletAddress(walletAddress);
+  }, [walletAddress]);
 
   // Handle wallet connect
   const handleConnect = async () => {
@@ -270,6 +275,60 @@ function App() {
     }
   };
 
+  // Cancel task and refund
+  const handleCancel = async (taskId) => {
+    if (!walletAddress) {
+      showToast('Please connect your wallet first', 'error');
+      return;
+    }
+
+    if (useDemo) {
+      setTasks(prev =>
+        prev.map(t =>
+          t.id === taskId ? { ...t, status: 'CANCELLED' } : t
+        )
+      );
+      showToast('Task cancelled and ALGO refunded. (Demo mode)');
+      return;
+    }
+
+    try {
+      await api.cancelTask(taskId, walletAddress);
+      showToast('Task cancelled — ALGO refunded to your wallet!');
+      fetchTasks();
+    } catch (err) {
+      showToast(err.message || 'Failed to cancel task', 'error');
+    }
+  };
+
+  // Dispute task
+  const handleDispute = async (taskId, reason) => {
+    if (!walletAddress) {
+      showToast('Please connect your wallet first', 'error');
+      return;
+    }
+
+    if (useDemo) {
+      setTasks(prev =>
+        prev.map(t =>
+          t.id === taskId
+            ? { ...t, status: 'DISPUTED', dispute_reason: reason, disputed_by: walletAddress }
+            : t
+        )
+      );
+      showToast('Dispute raised. Task is now frozen. (Demo mode)');
+      return;
+    }
+
+    try {
+      await api.disputeTask(taskId, walletAddress, reason);
+      showToast('Dispute raised — task is now frozen until resolution.');
+      fetchTasks();
+    } catch (err) {
+      showToast(err.message || 'Failed to raise dispute', 'error');
+    }
+  };
+
   return (
     <>
       <Navbar
@@ -303,6 +362,8 @@ function App() {
                 onClaim={handleClaim}
                 onSubmitProof={handleSubmitProof}
                 onApprove={handleApprove}
+                onCancel={handleCancel}
+                onDispute={handleDispute}
                 useDemo={useDemo}
               />
             }

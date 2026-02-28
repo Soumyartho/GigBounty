@@ -1,25 +1,24 @@
 """
 AI Verification Module (Optional)
-Uses Groq LLaMA to evaluate proof of completion.
+Uses Google Gemini to evaluate proof of completion.
 """
 
 import os
 import json
-from typing import Optional
 from dotenv import load_dotenv
 
 load_dotenv()
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
-GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
 
 
 async def verify_proof(task_description: str, proof_url: str) -> dict:
     """
-    Use Groq LLaMA to evaluate whether the proof satisfies the task.
+    Use Google Gemini to evaluate whether the proof satisfies the task.
     Returns: { score: float, verdict: "PASS"|"FAIL", reasoning: str }
     """
-    if not GROQ_API_KEY:
+    if not GEMINI_API_KEY:
         return {
             "score": 0.85,
             "verdict": "PASS",
@@ -53,28 +52,33 @@ Respond in JSON format ONLY:
 A score >= 0.7 should be a PASS.
 """
 
+        api_url = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
+
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://api.groq.com/openai/v1/chat/completions",
-                headers={
-                    "Authorization": f"Bearer {GROQ_API_KEY}",
-                    "Content-Type": "application/json"
-                },
+                api_url,
+                headers={"Content-Type": "application/json"},
                 json={
-                    "model": GROQ_MODEL,
-                    "messages": [
-                        {"role": "system", "content": "You are a task verification AI. Respond only in valid JSON."},
-                        {"role": "user", "content": prompt}
+                    "contents": [
+                        {
+                            "parts": [
+                                {"text": prompt}
+                            ]
+                        }
                     ],
-                    "temperature": 0.3,
-                    "max_tokens": 300
+                    "generationConfig": {
+                        "temperature": 0.3,
+                        "maxOutputTokens": 300,
+                        "responseMimeType": "application/json",
+                    }
                 },
                 timeout=30.0
             )
 
             if response.status_code == 200:
                 data = response.json()
-                content = data["choices"][0]["message"]["content"]
+                # Gemini response structure
+                content = data["candidates"][0]["content"]["parts"][0]["text"]
 
                 # Parse JSON from response
                 result = json.loads(content)
@@ -84,12 +88,19 @@ A score >= 0.7 should be a PASS.
                     "reasoning": result.get("reasoning", "No reasoning provided")
                 }
             else:
+                error_msg = response.text[:200]
                 return {
                     "score": 0,
                     "verdict": "FAIL",
-                    "reasoning": f"AI service error: {response.status_code}"
+                    "reasoning": f"Gemini API error ({response.status_code}): {error_msg}"
                 }
 
+    except json.JSONDecodeError as e:
+        return {
+            "score": 0,
+            "verdict": "FAIL",
+            "reasoning": f"Failed to parse Gemini response as JSON: {str(e)}"
+        }
     except Exception as e:
         return {
             "score": 0,

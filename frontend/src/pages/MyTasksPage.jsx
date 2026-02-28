@@ -24,6 +24,9 @@ export default function MyTasksPage({ tasks, walletAddress }) {
     CLAIMED: 'badge-claimed',
     SUBMITTED: 'badge-submitted',
     COMPLETED: 'badge-completed',
+    CANCELLED: 'badge-cancelled',
+    EXPIRED: 'badge-expired',
+    DISPUTED: 'badge-disputed',
   };
 
   const formatDate = (d) => {

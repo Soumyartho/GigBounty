@@ -45,7 +45,7 @@ export default function ForBusinessPage() {
               { title: 'Payment Disputes', stat: '$2.8B', desc: 'Lost annually in freelancing payment disputes. Our escrow eliminates this entirely.', bg: '#DBEAFE', border: '#93C5FD' },
               { title: 'Fraudulent Submissions', stat: '23%', desc: 'Of freelancing deliverables fail quality checks. Our AI catches these automatically.', bg: '#EDE9FE', border: '#C4B5FD' },
               { title: 'Slow Payouts', stat: '14 days', desc: 'Average payout delay on major platforms. We release payments in 4 seconds.', bg: '#FEF3C7', border: '#FCD34D' },
-              { title: 'Platform Losses', stat: '8-15%', desc: 'Revenue lost to chargebacks and disputes. GigBounty reduces this to near-zero.', bg: '#D1FAE5', border: '#6EE7B7' },
+              { title: 'Platform Losses', stat: '8–15%', desc: 'Revenue lost to chargebacks and disputes. GigBounty reduces this to near-zero.', bg: '#D1FAE5', border: '#6EE7B7' },
             ].map((item, i) => (
               <motion.div className="pain-card" key={i} variants={cardVariant} whileHover={prefersReduced ? {} : cardHover} style={{ backgroundColor: item.bg, borderColor: item.border }}>
                 <div className="pain-stat">{item.stat}</div>

@@ -1,11 +1,13 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import StepperHorizontal from '../components/StepperHorizontal';
 
-export default function TaskDetailPage({ tasks, walletAddress, onClaim, onSubmitProof, onApprove, useDemo }) {
+export default function TaskDetailPage({ tasks, walletAddress, onClaim, onSubmitProof, onApprove, onCancel, onDispute, useDemo }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const task = tasks.find(t => t.id === id);
+  const [disputeReason, setDisputeReason] = useState('');
+  const [showDisputeForm, setShowDisputeForm] = useState(false);
 
   if (!task) {
     return (
@@ -38,6 +40,16 @@ export default function TaskDetailPage({ tasks, walletAddress, onClaim, onSubmit
     CLAIMED: 'badge-claimed',
     SUBMITTED: 'badge-submitted',
     COMPLETED: 'badge-completed',
+    CANCELLED: 'badge-cancelled',
+    EXPIRED: 'badge-expired',
+    DISPUTED: 'badge-disputed',
+  };
+
+  const handleDisputeSubmit = () => {
+    if (!disputeReason.trim() || disputeReason.trim().length < 5) return;
+    onDispute?.(task.id, disputeReason.trim());
+    setShowDisputeForm(false);
+    setDisputeReason('');
   };
 
   return (
@@ -95,6 +107,52 @@ export default function TaskDetailPage({ tasks, walletAddress, onClaim, onSubmit
               </div>
             )}
 
+            {/* Dispute info banner */}
+            {task.status === 'DISPUTED' && (
+              <div style={{
+                marginBottom: '32px', padding: '20px', borderRadius: 'var(--radius-default)',
+                background: '#FFF5F5', border: '2px solid #FFCDD2'
+              }}>
+                <h3 style={{ fontSize: '14px', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#C62828' }}>
+                  ⚠️ Dispute Active
+                </h3>
+                {task.dispute_reason && (
+                  <p style={{ fontSize: '15px', lineHeight: 1.6, color: '#B71C1C', marginBottom: '8px' }}>
+                    <strong>Reason:</strong> {task.dispute_reason}
+                  </p>
+                )}
+                {task.disputed_by && (
+                  <p style={{ fontSize: '13px', color: '#C62828' }}>
+                    Raised by: <span style={{ fontFamily: 'monospace' }}>{truncateAddr(task.disputed_by)}</span>
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Cancelled info banner */}
+            {task.status === 'CANCELLED' && (
+              <div style={{
+                marginBottom: '32px', padding: '20px', borderRadius: 'var(--radius-default)',
+                background: 'var(--bg-secondary)', border: '2px solid var(--border-light)'
+              }}>
+                <p style={{ fontSize: '15px', color: 'var(--text-muted)', textAlign: 'center' }}>
+                  🚫 This task was cancelled and the ALGO has been refunded to the creator.
+                </p>
+              </div>
+            )}
+
+            {/* Expired info banner */}
+            {task.status === 'EXPIRED' && (
+              <div style={{
+                marginBottom: '32px', padding: '20px', borderRadius: 'var(--radius-default)',
+                background: '#FFF8E1', border: '2px solid #FFE082'
+              }}>
+                <p style={{ fontSize: '15px', color: '#E65100', textAlign: 'center' }}>
+                  ⏰ This task has expired. The ALGO will be refunded to the creator.
+                </p>
+              </div>
+            )}
+
             {task.status === 'COMPLETED' && (
               <div style={{ display: 'flex', justifyContent: 'center', padding: '16px 0' }}>
                 <span className="badge-blockchain">🛡️ Blockchain Verified</span>
@@ -147,6 +205,7 @@ export default function TaskDetailPage({ tasks, walletAddress, onClaim, onSubmit
           {/* Actions card */}
           <div className="task-detail-card">
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {/* OPEN — Claim (non-creator) */}
               {task.status === 'OPEN' && !isCreator && walletAddress && (
                 <button className="btn btn-primary btn-full" onClick={() => onClaim?.(task.id)}>
                   ⚡ Claim This Bounty
@@ -159,12 +218,22 @@ export default function TaskDetailPage({ tasks, walletAddress, onClaim, onSubmit
                 </p>
               )}
 
+              {/* OPEN — Cancel (creator only) */}
               {task.status === 'OPEN' && isCreator && (
-                <p className="text-small" style={{ textAlign: 'center' }}>
-                  Your task — awaiting claims
-                </p>
+                <>
+                  <p className="text-small" style={{ textAlign: 'center' }}>
+                    Your task — awaiting claims
+                  </p>
+                  <button
+                    className="btn btn-danger btn-full"
+                    onClick={() => onCancel?.(task.id)}
+                  >
+                    🚫 Cancel & Refund
+                  </button>
+                </>
               )}
 
+              {/* CLAIMED — Submit proof (worker) */}
               {task.status === 'CLAIMED' && isWorker && (
                 <button className="btn btn-primary btn-full" onClick={() => onSubmitProof?.(task.id)}>
                   📎 Submit Proof
@@ -177,6 +246,7 @@ export default function TaskDetailPage({ tasks, walletAddress, onClaim, onSubmit
                 </p>
               )}
 
+              {/* SUBMITTED — Approve (creator) */}
               {task.status === 'SUBMITTED' && isCreator && (
                 <button className="btn btn-primary btn-full" onClick={() => onApprove?.(task.id)}>
                   ✅ Approve & Release Payment
@@ -189,9 +259,79 @@ export default function TaskDetailPage({ tasks, walletAddress, onClaim, onSubmit
                 </p>
               )}
 
+              {/* CLAIMED / SUBMITTED — Dispute (creator or worker) */}
+              {(task.status === 'CLAIMED' || task.status === 'SUBMITTED') && (isCreator || isWorker) && (
+                <>
+                  {!showDisputeForm ? (
+                    <button
+                      className="btn btn-warning btn-full"
+                      onClick={() => setShowDisputeForm(true)}
+                    >
+                      ⚠️ Raise Dispute
+                    </button>
+                  ) : (
+                    <div style={{
+                      padding: '16px', borderRadius: 'var(--radius-default)',
+                      background: '#FFF8E1', border: '1px solid #FFE082'
+                    }}>
+                      <label style={{ fontSize: '13px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
+                        Reason for dispute
+                      </label>
+                      <textarea
+                        className="form-textarea"
+                        value={disputeReason}
+                        onChange={(e) => setDisputeReason(e.target.value)}
+                        placeholder="Describe why you're disputing this task..."
+                        rows={3}
+                        style={{ marginBottom: '12px' }}
+                      />
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <button
+                          className="btn btn-secondary"
+                          style={{ flex: 1 }}
+                          onClick={() => { setShowDisputeForm(false); setDisputeReason(''); }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="btn btn-warning"
+                          style={{ flex: 2 }}
+                          disabled={!disputeReason.trim() || disputeReason.trim().length < 5}
+                          onClick={handleDisputeSubmit}
+                        >
+                          Submit Dispute
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* COMPLETED */}
               {task.status === 'COMPLETED' && (
                 <p className="text-small" style={{ textAlign: 'center', color: 'var(--accent-green)' }}>
                   ✅ Task completed & payment released
+                </p>
+              )}
+
+              {/* DISPUTED */}
+              {task.status === 'DISPUTED' && (
+                <p className="text-small" style={{ textAlign: 'center', color: '#C62828' }}>
+                  ⚠️ This task is under dispute — funds are frozen
+                </p>
+              )}
+
+              {/* CANCELLED */}
+              {task.status === 'CANCELLED' && (
+                <p className="text-small" style={{ textAlign: 'center', color: 'var(--text-muted)' }}>
+                  🚫 Task cancelled — ALGO refunded
+                </p>
+              )}
+
+              {/* EXPIRED */}
+              {task.status === 'EXPIRED' && (
+                <p className="text-small" style={{ textAlign: 'center', color: '#E65100' }}>
+                  ⏰ Task expired — refund available
                 </p>
               )}
             </div>

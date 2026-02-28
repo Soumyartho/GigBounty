@@ -1488,11 +1488,13 @@
 }
 
 .pain-stat {
-  font-family: var(--font-display);
-  font-size: 28px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 32px;
   font-weight: 700;
   color: var(--accent-coral);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
 
 .pain-card h3 {
