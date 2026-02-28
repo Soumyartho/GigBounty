@@ -47,8 +47,7 @@ export default function Navbar({ walletAddress, onConnect, onDisconnect }) {
     >
       <div className="navbar-inner">
         <NavLink to="/" className="navbar-logo">
-          <div className="navbar-logo-icon">⚡</div>
-          GigBounty
+          <img src="/Logo.svg" alt="GigBounty" style={{ height: '36px', width: 'auto' }} />
         </NavLink>
 
         <ul className="navbar-links">
