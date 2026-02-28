@@ -136,14 +136,14 @@ export default function ForBusinessPage() {
               <span className="pricing-label">per transaction</span>
             </div>
             <ul className="pricing-features">
-              <li>✅ AI work verification included</li>
-              <li>✅ AI price suggestion engine</li>
-              <li>✅ Blockchain escrow & instant payouts</li>
-              <li>✅ Transaction-level audit trail</li>
-              <li>✅ REST API with full documentation</li>
-              <li>✅ Dashboard for monitoring</li>
-              <li>❌ No monthly fees</li>
-              <li>❌ No setup costs</li>
+              <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M9.5 9a3 3 0 015 0c0 1.5-2.5 2-2.5 4" /><circle cx="12" cy="17" r=".5" fill="#111111" /></svg> AI work verification included</li>
+              <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" /></svg> AI price suggestion engine</li>
+              <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 018 0v4" /></svg> Blockchain escrow & instant payouts</li>
+              <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="3" width="14" height="18" rx="2" /><line x1="9" y1="8" x2="15" y2="8" /><line x1="9" y1="12" x2="15" y2="12" /><line x1="9" y1="16" x2="12" y2="16" /></svg> Transaction-level audit trail</li>
+              <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 18 22 6 2 6 2 18 8 18" /><polyline points="8 14 12 10 16 14" /></svg> REST API with full documentation</li>
+              <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><line x1="7" y1="16" x2="7" y2="11" /><line x1="12" y1="16" x2="12" y2="8" /><line x1="17" y1="16" x2="17" y2="13" /></svg> Dashboard for monitoring</li>
+              <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /><line x1="4" y1="21" x2="20" y2="5" /></svg> No monthly fees</li>
+              <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94L6.7 20.2a2.83 2.83 0 01-4-4l6.8-6.73" /><line x1="4" y1="20" x2="20" y2="4" /></svg> No setup costs</li>
             </ul>
             <motion.button
               className="btn btn-primary"

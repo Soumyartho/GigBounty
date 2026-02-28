@@ -43,10 +43,10 @@ export default function AboutPage() {
                 no middlemen, no payment delays, no disputes.
               </p>
               <ul className="model-features">
-                <li>✅ Escrow-locked payments</li>
-                <li>✅ Instant payout on approval</li>
-                <li>✅ AI-assisted work verification</li>
-                <li>✅ Transaction-level transparency</li>
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M8 12l3 3 5-5" /></svg> Escrow-locked payments</li>
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M8 12l3 3 5-5" /></svg> Instant payout on approval</li>
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M8 12l3 3 5-5" /></svg> AI-assisted work verification</li>
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M8 12l3 3 5-5" /></svg> Transaction-level transparency</li>
               </ul>
               <motion.button
                 className="btn btn-primary"
@@ -68,10 +68,10 @@ export default function AboutPage() {
                 price suggestions, and blockchain payments so you don't have to.
               </p>
               <ul className="model-features">
-                <li>✅ AI verifies work quality</li>
-                <li>✅ AI suggests fair pricing</li>
-                <li>✅ Reduce fraud & disputes by 90%</li>
-                <li>✅ 3% platform fee — that's it</li>
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M8 12l3 3 5-5" /></svg> AI verifies work quality</li>
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M8 12l3 3 5-5" /></svg> AI suggests fair pricing</li>
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M8 12l3 3 5-5" /></svg> Reduce fraud & disputes by 90%</li>
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M8 12l3 3 5-5" /></svg> 3% platform fee — that's it</li>
               </ul>
               <motion.button
                 className="btn btn-secondary"

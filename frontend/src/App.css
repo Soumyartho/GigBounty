@@ -1323,6 +1323,9 @@
 .model-features li {
   font-size: 14px;
   color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* AI Steps */
@@ -1605,6 +1608,9 @@
 .pricing-features li {
   font-size: 14px;
   color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 /* Code Block */
