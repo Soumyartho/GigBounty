@@ -1,0 +1,338 @@
+import { useState, useEffect, useCallback } from 'react';
+import './App.css';
+import Navbar from './components/Navbar';
+import HeroBlock from './components/HeroBlock';
+import StatsBar from './components/StatsBar';
+import TaskBoard from './components/TaskBoard';
+import PostTaskForm from './components/PostTaskForm';
+import HowItWorks from './components/HowItWorks';
+import StepperHorizontal from './components/StepperHorizontal';
+import SubmitProofModal from './components/SubmitProofModal';
+import Footer from './components/Footer';
+import Toast from './components/Toast';
+import useWallet from './hooks/useWallet';
+import { api } from './services/api';
+
+// Demo tasks for when backend is not running
+const DEMO_TASKS = [
+  {
+    id: '1',
+    title: 'Design a Logo for DeFi Protocol',
+    description: 'Create a modern, flat-style logo for a DeFi protocol. Must include icon and wordmark. Deliverable: SVG + PNG files.',
+    amount: 15,
+    creator_wallet: 'DEMO_CREATOR_1',
+    worker_wallet: null,
+    status: 'OPEN',
+    proof_url: null,
+    created_at: new Date().toISOString(),
+    deadline: '2026-03-15',
+  },
+  {
+    id: '2',
+    title: 'Write Smart Contract Documentation',
+    description: 'Document the escrow smart contract functions, parameters, and usage examples. Must be clear for developers.',
+    amount: 8,
+    creator_wallet: 'DEMO_CREATOR_2',
+    worker_wallet: 'DEMO_WORKER_1',
+    status: 'CLAIMED',
+    proof_url: null,
+    created_at: new Date().toISOString(),
+    deadline: '2026-03-10',
+  },
+  {
+    id: '3',
+    title: 'Build a Token Price Widget',
+    description: 'Create a React component that shows real-time ALGO price with a mini chart. Use CoinGecko API.',
+    amount: 20,
+    creator_wallet: 'DEMO_CREATOR_1',
+    worker_wallet: 'DEMO_WORKER_2',
+    status: 'SUBMITTED',
+    proof_url: 'https://github.com/example/price-widget',
+    created_at: new Date().toISOString(),
+    deadline: '2026-03-08',
+  },
+  {
+    id: '4',
+    title: 'Create Landing Page Copy',
+    description: 'Write compelling copy for the GigBounty landing page. Include hero headline, value props, and CTA text.',
+    amount: 5,
+    creator_wallet: 'DEMO_CREATOR_3',
+    worker_wallet: null,
+    status: 'OPEN',
+    proof_url: null,
+    created_at: new Date().toISOString(),
+    deadline: '2026-03-20',
+  },
+  {
+    id: '5',
+    title: 'Audit Algorand PyTEAL Contract',
+    description: 'Security audit of a PyTEAL escrow contract. Check for reentrancy, overflow, and access control issues.',
+    amount: 50,
+    creator_wallet: 'DEMO_CREATOR_2',
+    worker_wallet: 'DEMO_WORKER_3',
+    status: 'COMPLETED',
+    proof_url: 'https://github.com/example/audit-report',
+    created_at: new Date().toISOString(),
+    deadline: '2026-03-01',
+  },
+  {
+    id: '6',
+    title: 'Deploy TestNet Faucet Bot',
+    description: 'Build a Discord bot that dispenses TestNet ALGO to users. Must include rate limiting and address validation.',
+    amount: 12,
+    creator_wallet: 'DEMO_CREATOR_1',
+    worker_wallet: null,
+    status: 'OPEN',
+    proof_url: null,
+    created_at: new Date().toISOString(),
+    deadline: '2026-03-25',
+  },
+];
+
+function App() {
+  const { walletAddress, connecting, connect, disconnect } = useWallet();
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [proofModal, setProofModal] = useState(null);
+  const [toast, setToast] = useState(null);
+  const [useDemo, setUseDemo] = useState(false);
+
+  // Fetch tasks from backend or use demo data
+  const fetchTasks = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await api.getTasks();
+      setTasks(data);
+      setUseDemo(false);
+    } catch (err) {
+      console.log('Backend not available, using demo data');
+      setTasks(DEMO_TASKS);
+      setUseDemo(true);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks]);
+
+  // Show toast notification
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type });
+  };
+
+  // Handle wallet connect
+  const handleConnect = async () => {
+    try {
+      await connect();
+      showToast('Wallet connected successfully!');
+    } catch (err) {
+      showToast('Failed to connect wallet', 'error');
+    }
+  };
+
+  // Handle wallet disconnect
+  const handleDisconnect = () => {
+    disconnect();
+    showToast('Wallet disconnected', 'info');
+  };
+
+  // Create task
+  const handleCreateTask = async (taskData) => {
+    if (useDemo) {
+      const newTask = {
+        ...taskData,
+        id: String(Date.now()),
+        status: 'OPEN',
+        worker_wallet: null,
+        proof_url: null,
+        created_at: new Date().toISOString(),
+      };
+      setTasks(prev => [newTask, ...prev]);
+      showToast('Bounty posted successfully! (Demo mode)');
+      return;
+    }
+
+    try {
+      await api.createTask(taskData);
+      showToast('Bounty posted and ALGO locked in escrow!');
+      fetchTasks();
+    } catch (err) {
+      showToast(err.message || 'Failed to create task', 'error');
+      throw err;
+    }
+  };
+
+  // Claim task
+  const handleClaim = async (taskId) => {
+    if (!walletAddress) {
+      showToast('Please connect your wallet first', 'error');
+      return;
+    }
+
+    if (useDemo) {
+      setTasks(prev =>
+        prev.map(t =>
+          t.id === taskId ? { ...t, status: 'CLAIMED', worker_wallet: walletAddress } : t
+        )
+      );
+      showToast('Task claimed! Start working on it. (Demo mode)');
+      return;
+    }
+
+    try {
+      await api.claimTask(taskId, walletAddress);
+      showToast('Task claimed! Start working on it.');
+      fetchTasks();
+    } catch (err) {
+      showToast(err.message || 'Failed to claim task', 'error');
+    }
+  };
+
+  // Open submit proof modal
+  const handleSubmitProof = (taskId) => {
+    const task = tasks.find(t => t.id === taskId);
+    setProofModal(task);
+  };
+
+  // Submit proof
+  const handleProofSubmit = async (proofData) => {
+    if (useDemo) {
+      setTasks(prev =>
+        prev.map(t =>
+          t.id === proofData.task_id
+            ? { ...t, status: 'SUBMITTED', proof_url: proofData.proof_url }
+            : t
+        )
+      );
+      showToast('Proof submitted! Awaiting approval. (Demo mode)');
+      setProofModal(null);
+      return;
+    }
+
+    try {
+      await api.submitProof(proofData);
+      showToast('Proof submitted! Awaiting creator approval.');
+      setProofModal(null);
+      fetchTasks();
+    } catch (err) {
+      showToast(err.message || 'Failed to submit proof', 'error');
+      throw err;
+    }
+  };
+
+  // Approve task
+  const handleApprove = async (taskId) => {
+    if (useDemo) {
+      setTasks(prev =>
+        prev.map(t =>
+          t.id === taskId ? { ...t, status: 'COMPLETED' } : t
+        )
+      );
+      showToast('Task approved! Payment released. (Demo mode)');
+      return;
+    }
+
+    try {
+      await api.approveTask(taskId);
+      showToast('Task approved and ALGO released to worker!');
+      fetchTasks();
+    } catch (err) {
+      showToast(err.message || 'Failed to approve task', 'error');
+    }
+  };
+
+  // Scroll to section
+  const handleNavigate = (section) => {
+    const el = document.getElementById(section === 'home' ? 'root' : section);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else if (section === 'home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <>
+      <Navbar
+        walletAddress={walletAddress}
+        onConnect={handleConnect}
+        onDisconnect={handleDisconnect}
+        onNavigate={handleNavigate}
+      />
+
+      <main>
+        <HeroBlock
+          onGetStarted={() => handleNavigate('post')}
+          onLearnMore={() => handleNavigate('how')}
+        />
+
+        <StatsBar tasks={tasks} />
+
+        {/* Stepper showing overall platform flow */}
+        <div className="container" style={{ paddingBottom: '32px' }}>
+          <StepperHorizontal status="OPEN" />
+        </div>
+
+        <TaskBoard
+          tasks={tasks}
+          loading={loading}
+          walletAddress={walletAddress}
+          onClaim={handleClaim}
+          onSubmitProof={handleSubmitProof}
+          onApprove={handleApprove}
+        />
+
+        <PostTaskForm
+          walletAddress={walletAddress}
+          onSubmit={handleCreateTask}
+        />
+
+        <HowItWorks />
+      </main>
+
+      <Footer />
+
+      {/* Submit Proof Modal */}
+      {proofModal && (
+        <SubmitProofModal
+          task={proofModal}
+          onClose={() => setProofModal(null)}
+          onSubmit={handleProofSubmit}
+        />
+      )}
+
+      {/* Toast Notifications */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+
+      {/* Demo mode indicator */}
+      {useDemo && (
+        <div style={{
+          position: 'fixed',
+          bottom: '16px',
+          left: '16px',
+          padding: '8px 16px',
+          background: 'var(--accent-yellow)',
+          color: 'var(--accent-black)',
+          borderRadius: 'var(--radius-pill)',
+          fontSize: '12px',
+          fontWeight: 600,
+          textTransform: 'uppercase',
+          letterSpacing: '0.06em',
+          zIndex: 1000,
+        }}>
+          ⚡ Demo Mode — Backend Not Connected
+        </div>
+      )}
+    </>
+  );
+}
+
+export default App;
