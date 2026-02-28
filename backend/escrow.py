@@ -257,6 +257,20 @@ def verify_payment(sender: str, amount_algo: float, tx_id: str = None) -> dict:
             "message": "Transaction ID is required for payment verification"
         }
 
+    # ─── Demo Bypass (Frontend Fallback) ──────────────────────
+    if tx_id.startswith("demo-bypass-"):
+        if DEBUG_MODE:
+            return {
+                "verified": True,
+                "tx_id": tx_id,
+                "message": "Debug mode — accepted mock transaction fallback"
+            }
+        return {
+            "verified": False,
+            "tx_id": tx_id,
+            "message": "Demo bypass transactions are not allowed in production"
+        }
+
     # ─── Double-spend check ───────────────────────────────────
     if _is_tx_used(tx_id):
         return {

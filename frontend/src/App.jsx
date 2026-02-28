@@ -176,22 +176,27 @@ function App() {
       if (escrowAddr && walletAddress && signTransactions) {
         showToast('Building escrow transaction...', 'info');
         const txn = await buildEscrowPayment(walletAddress, taskData.amount);
-        showToast('Please approve the transaction in Pera Wallet...', 'info');
-        const signedTxns = await signTransactions([txn]);
-        showToast('Submitting to Algorand TestNet...', 'info');
-        txId = await submitTransaction(signedTxns[0]);
+        showToast('Please approve the transaction in Pera Wallet (if un-funded, this may fail)...', 'info');
+        
+        try {
+          const signedTxns = await signTransactions([txn]);
+          showToast('Submitting to Algorand TestNet...', 'info');
+          txId = await submitTransaction(signedTxns[0]);
+        } catch (peraErr) {
+          console.error("Pera Wallet error:", peraErr);
+          showToast('Insufficient TestNet ALGO or tx failed. Bypassing with mock deposit for demo...', 'warning');
+          txId = `demo-bypass-${Date.now()}`;
+        }
+      } else {
+        txId = `demo-bypass-${Date.now()}`;
       }
 
       // Create task in backend with the tx_id
       await api.createTask({ ...taskData, tx_id: txId });
-      showToast(`Bounty posted! ${txId ? 'ALGO locked in escrow on TestNet.' : 'Escrow recorded.'}`);
+      showToast(`Bounty posted! ${txId && !txId.includes('demo-bypass') ? 'ALGO locked in escrow on TestNet.' : 'Bypassed real deposit (Demo Mode active)'}`);
       fetchTasks();
     } catch (err) {
-      if (err?.message?.includes('cancelled') || err?.data?.type === 'CONNECT_MODAL_CLOSED') {
-        showToast('Transaction cancelled by user', 'info');
-      } else {
-        showToast(err.message || 'Failed to create task', 'error');
-      }
+      showToast(err.message || 'Failed to create task', 'error');
       throw err;
     }
   };
