@@ -74,7 +74,7 @@
 .navbar-links {
   display: flex;
   align-items: center;
-  gap: var(--space-component);
+  gap: 32px;
   list-style: none;
 }
 
@@ -83,9 +83,10 @@
   font-weight: 600;
   color: var(--text-secondary);
   text-decoration: none;
-  padding: 8px 12px;
+  padding: 10px 18px;
   border-radius: var(--radius-default);
   transition: all var(--transition-fast);
+  letter-spacing: 0.02em;
 }
 
 .navbar-links a:hover {
