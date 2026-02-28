@@ -1,65 +1,43 @@
-import { useState } from "react";
+import { NavLink, useNavigate } from 'react-router-dom';
 
 export default function Navbar({
   walletAddress,
   onConnect,
   onDisconnect,
-  onNavigate,
 }) {
+  const navigate = useNavigate();
+
   const truncateAddress = (addr) => {
-    if (!addr) return "";
+    if (!addr) return '';
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   };
 
   return (
     <nav className="navbar">
       <div className="navbar-inner">
-        <a
-          href="#"
-          className="navbar-logo"
-          onClick={(e) => {
-            e.preventDefault();
-            onNavigate?.("home");
-          }}
-        >
+        <NavLink to="/" className="navbar-logo">
           <div className="navbar-logo-icon">⚡</div>
           GigBounty
-        </a>
+        </NavLink>
 
         <ul className="navbar-links">
           <li>
-            <a
-              href="#tasks"
-              onClick={(e) => {
-                e.preventDefault();
-                onNavigate?.("tasks");
-              }}
-            >
+            <NavLink to="/tasks" className={({ isActive }) => isActive ? 'nav-active' : ''}>
               Browse Tasks
-            </a>
+            </NavLink>
           </li>
           <li>
-            <a
-              href="#post"
-              onClick={(e) => {
-                e.preventDefault();
-                onNavigate?.("post");
-              }}
-            >
+            <NavLink to="/post" className={({ isActive }) => isActive ? 'nav-active' : ''}>
               Post a Task
-            </a>
+            </NavLink>
           </li>
-          <li>
-            <a
-              href="#how"
-              onClick={(e) => {
-                e.preventDefault();
-                onNavigate?.("how");
-              }}
-            >
-              How It Works
-            </a>
-          </li>
+          {walletAddress && (
+            <li>
+              <NavLink to="/my-tasks" className={({ isActive }) => isActive ? 'nav-active' : ''}>
+                My Tasks
+              </NavLink>
+            </li>
+          )}
         </ul>
 
         <div className="navbar-actions">
@@ -73,9 +51,9 @@ export default function Navbar({
                 className="btn btn-secondary"
                 onClick={onDisconnect}
                 style={{
-                  padding: "8px 16px",
-                  minHeight: "36px",
-                  fontSize: "12px",
+                  padding: '8px 16px',
+                  minHeight: '36px',
+                  fontSize: '12px',
                 }}
               >
                 Disconnect

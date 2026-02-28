@@ -41,6 +41,16 @@ async def get_tasks():
     return db.get_all_tasks()
 
 
+# ─── GET /tasks/{task_id} ─────────────────────────────────────
+@app.get("/tasks/{task_id}", response_model=TaskResponse)
+async def get_task(task_id: str):
+    """Get a single task by ID."""
+    task = db.get_task(task_id)
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return task
+
+
 # ─── POST /task/create ────────────────────────────────────────
 @app.post("/task/create", response_model=TaskResponse)
 async def create_task(data: TaskCreate):
