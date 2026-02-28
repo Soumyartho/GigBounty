@@ -23,6 +23,9 @@ export const api = {
   // Get all tasks
   getTasks: () => request('/tasks'),
 
+  // Get single task by ID
+  getTask: (taskId) => request(`/tasks/${taskId}`),
+
   // Create a new task
   createTask: (data) =>
     request('/task/create', {
