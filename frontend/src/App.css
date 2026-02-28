@@ -482,6 +482,7 @@
   gap: var(--space-default);
   transition: transform var(--transition-fast), border-color var(--transition-fast);
   position: relative;
+  height: 100%;
 }
 
 .task-card:hover {
