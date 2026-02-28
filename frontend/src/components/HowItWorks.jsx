@@ -2,22 +2,22 @@ export default function HowItWorks() {
   const steps = [
     {
       number: 1,
-      title: 'Post a Task',
+      title: '📝 Post a Task',
       description: 'Describe your micro-task and lock ALGO in escrow as the bounty reward.',
     },
     {
       number: 2,
-      title: 'Claim & Work',
+      title: '✋ Claim & Work',
       description: 'Workers browse open tasks, claim one, and start working on it.',
     },
     {
       number: 3,
-      title: 'Submit Proof',
+      title: '🔗 Submit Proof',
       description: 'Worker submits a proof URL. Optional AI auto-verification available.',
     },
     {
       number: 4,
-      title: 'Get Paid',
+      title: '💸 Get Paid',
       description: 'Creator approves the work and ALGO is released instantly from escrow.',
     },
   ];

@@ -10,7 +10,7 @@
   top: 0;
   z-index: 100;
   background-color: var(--bg-primary);
-  border-bottom: 1px solid var(--border-light);
+  border-bottom: 2px solid var(--border-dark);
   padding: var(--space-default) 0;
   transition: background-color var(--transition-fast);
 }
@@ -80,14 +80,17 @@
 
 .navbar-links a {
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-secondary);
   text-decoration: none;
-  transition: color var(--transition-fast);
+  padding: 8px 12px;
+  border-radius: var(--radius-default);
+  transition: all var(--transition-fast);
 }
 
 .navbar-links a:hover {
   color: var(--text-primary);
+  background-color: rgba(17, 17, 17, 0.05);
 }
 
 /* ============================================================
@@ -164,6 +167,12 @@
   background-color: rgba(163, 230, 53, 0.15);
   bottom: -20px;
   left: 20px;
+}
+
+.badge-open {
+  background-color: var(--accent-green);
+  color: var(--accent-black);
+  border: 1px solid var(--accent-green);
 }
 
 .hero-circle-3 {
@@ -243,6 +252,14 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--border-dark);
+  box-shadow: none;
 }
 
 /* Dot grid accent */
@@ -325,7 +342,7 @@
 
 .stepper-connector {
   width: 60px;
-  height: 2px;
+  height: 4px;
   background-color: var(--border-light);
   margin: 0 var(--space-tight);
   margin-bottom: 24px;
@@ -395,12 +412,13 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-default);
-  transition: transform var(--transition-fast);
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
   position: relative;
 }
 
 .task-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  border-color: var(--border-dark);
 }
 
 .task-card-header {
@@ -554,20 +572,22 @@
 }
 
 .stat-item {
-  text-align: center;
-  padding: var(--space-component);
+  text-align: left;
+  padding: var(--space-section);
   background: var(--bg-card);
-  border: 1px solid var(--border-light);
+  border: 2px solid var(--border-light);
   border-radius: var(--radius-default);
+  display: flex;
+  flex-direction: column;
 }
 
 .stat-number {
   font-family: var(--font-display);
-  font-size: 36px;
+  font-size: 40px;
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1;
-  margin-bottom: var(--space-tight);
+  margin-bottom: var(--space-micro);
 }
 
 .stat-label {
@@ -584,6 +604,9 @@
 .how-it-works {
   padding: var(--space-major) 0;
   text-align: center;
+  background-color: #EBE6DD;
+  border-top: 2px solid var(--border-dark);
+  border-bottom: 2px solid var(--border-dark);
 }
 
 .how-it-works h2 {
@@ -602,8 +625,8 @@
 }
 
 .step-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-light);
+  background: var(--bg-primary);
+  border: 2px solid var(--border-light);
   border-radius: var(--radius-default);
   padding: var(--space-section);
   text-align: center;

@@ -9,7 +9,7 @@ export default function HeroBlock({ onGetStarted, onLearnMore }) {
             Powered by Algorand blockchain with optional AI verification.
           </p>
           <div className="hero-actions">
-            <button className="btn btn-primary" onClick={onGetStarted}>
+            <button className="btn btn-primary" onClick={onGetStarted} style={{ padding: '16px 40px', fontSize: '16px' }}>
               Post a Bounty
             </button>
             <button className="btn btn-secondary" onClick={onLearnMore}>

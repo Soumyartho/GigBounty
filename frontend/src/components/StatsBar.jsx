@@ -5,10 +5,10 @@ export default function StatsBar({ tasks }) {
   const workers = new Set(tasks.filter(t => t.worker_wallet).map(t => t.worker_wallet)).size;
 
   const stats = [
-    { number: tasks.length, label: 'Total Tasks' },
-    { number: openCount, label: 'Open Bounties' },
-    { number: `${totalBounty.toFixed(1)}`, label: 'ALGO Locked' },
-    { number: completedCount, label: 'Completed' },
+    { number: tasks.length, label: '📋 Total Tasks' },
+    { number: openCount, label: '⚡ Open Bounties' },
+    { number: `${totalBounty.toFixed(1)}`, label: '💰 ALGO Locked' },
+    { number: completedCount, label: '🛡️ Completed' },
   ];
 
   return (
