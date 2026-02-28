@@ -45,7 +45,7 @@ export default function ForBusinessPage() {
               { title: 'Payment Disputes', stat: '$2.8B', desc: 'Lost annually in freelancing payment disputes. Our escrow eliminates this entirely.' },
               { title: 'Fraudulent Submissions', stat: '23%', desc: 'Of freelancing deliverables fail quality checks. Our AI catches these automatically.' },
               { title: 'Slow Payouts', stat: '14 days', desc: 'Average payout delay on major platforms. We release payments in 4 seconds.' },
-              { title: 'Platform Losses', stat: '8-15%', desc: 'Revenue lost to chargebacks and disputes. GigBounty reduces this to near-zero.' },
+              { title: 'Platform Losses', stat: '8–15%', desc: 'Revenue lost to chargebacks and disputes. GigBounty reduces this to near-zero.' },
             ].map((item, i) => (
               <motion.div className="pain-card" key={i} variants={cardVariant} whileHover={prefersReduced ? {} : cardHover}>
                 <div className="pain-stat">{item.stat}</div>
