@@ -10,7 +10,7 @@ from models import (
     TaskApprove, TaskRelease, TaskResponse
 )
 import database as db
-from escrow import verify_payment, release_payment
+from escrow import verify_payment, release_payment, get_escrow_info
 from ai_verify import verify_proof
 
 app = FastAPI(
@@ -32,6 +32,13 @@ app.add_middleware(
 @app.get("/")
 async def root():
     return {"message": "GigBounty API is running", "version": "1.0.0"}
+
+
+# ─── GET /escrow/info ─────────────────────────────────────────
+@app.get("/escrow/info")
+async def escrow_info():
+    """Get escrow wallet address, balance, and fee info."""
+    return get_escrow_info()
 
 
 # ─── GET /tasks ───────────────────────────────────────────────
@@ -56,7 +63,7 @@ async def get_task(task_id: str):
 async def create_task(data: TaskCreate):
     """Create a new task with escrowed ALGO."""
     # Verify escrow payment
-    payment = verify_payment(data.creator_wallet, data.amount)
+    payment = verify_payment(data.creator_wallet, data.amount, data.tx_id)
     if not payment["verified"]:
         raise HTTPException(status_code=400, detail=payment["message"])
 

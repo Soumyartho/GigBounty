@@ -1,49 +1,91 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { PeraWalletConnect } from '@perawallet/connect';
 
-// Mock wallet for demo purposes
-// In production, replace with @perawallet/connect
+// Singleton wallet instance
+const peraWallet = new PeraWalletConnect();
+
 export default function useWallet() {
   const [walletAddress, setWalletAddress] = useState(null);
   const [connecting, setConnecting] = useState(false);
+  const reconnectChecked = useRef(false);
+
+  // Check for existing session on mount
+  useEffect(() => {
+    if (reconnectChecked.current) return;
+    reconnectChecked.current = true;
+
+    peraWallet.reconnectSession()
+      .then((accounts) => {
+        if (accounts.length > 0) {
+          setWalletAddress(accounts[0]);
+          peraWallet.connector?.on('disconnect', handleDisconnect);
+        }
+      })
+      .catch(() => {
+        // No existing session
+      });
+  }, []);
+
+  const handleDisconnect = useCallback(() => {
+    setWalletAddress(null);
+  }, []);
 
   const connect = useCallback(async () => {
     setConnecting(true);
     try {
-      // Check if PeraWalletConnect is available
-      if (typeof window !== 'undefined' && window.PeraWalletConnect) {
-        const peraWallet = new window.PeraWalletConnect();
-        const accounts = await peraWallet.connect();
-        if (accounts && accounts.length > 0) {
-          setWalletAddress(accounts[0]);
-          return accounts[0];
-        }
-      } else {
-        // Demo mode — generate a mock Algorand address
-        const mockAddr = generateMockAlgoAddress();
-        setWalletAddress(mockAddr);
-        return mockAddr;
+      const accounts = await peraWallet.connect();
+
+      if (accounts && accounts.length > 0) {
+        setWalletAddress(accounts[0]);
+        peraWallet.connector?.on('disconnect', handleDisconnect);
+        return accounts[0];
       }
     } catch (error) {
-      console.error('Wallet connection failed:', error);
-      // If user cancelled, still provide demo mode
+      // User closed modal or Pera unavailable — fall back to mock
       if (error?.data?.type === 'CONNECT_MODAL_CLOSED') {
-        console.log('User closed wallet modal');
+        console.log('User closed Pera modal');
+        throw error;
       }
-      throw error;
+
+      console.warn('Pera Wallet not available, using mock wallet');
+      const mockAddr = generateMockAlgoAddress();
+      setWalletAddress(mockAddr);
+      return mockAddr;
     } finally {
       setConnecting(false);
     }
-  }, []);
+  }, [handleDisconnect]);
 
-  const disconnect = useCallback(() => {
+  const disconnect = useCallback(async () => {
+    try {
+      await peraWallet.disconnect();
+    } catch (err) {
+      // Ignore disconnect errors
+    }
     setWalletAddress(null);
   }, []);
+
+  /**
+   * Sign a transaction using Pera Wallet
+   * @param {import('algosdk').Transaction[]} txns - Array of transactions to sign
+   * @returns {Uint8Array[]} Signed transaction bytes
+   */
+  const signTransactions = useCallback(async (txns) => {
+    const txGroups = txns.map((txn) => ({
+      txn,
+      signers: [walletAddress],
+    }));
+
+    const signedTxns = await peraWallet.signTransaction([txGroups]);
+    return signedTxns;
+  }, [walletAddress]);
 
   return {
     walletAddress,
     connecting,
     connect,
     disconnect,
+    signTransactions,
   };
 }
 

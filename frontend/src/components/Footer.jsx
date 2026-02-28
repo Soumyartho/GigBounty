@@ -14,6 +14,10 @@ export default function Footer() {
         </span>
         <div className="footer-links">
           <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+            <a href="/about">About</a>
+            <a href="/leaderboard">Leaderboard</a>
+            <a href="/business">For Business</a>
+            <a href="/wallet">Wallet</a>
             <a href="https://algorand.com" target="_blank" rel="noopener noreferrer">Algorand</a>
             <a href="https://perawallet.app" target="_blank" rel="noopener noreferrer">Pera Wallet</a>
             <a href="#" onClick={(e) => e.preventDefault()}>GitHub</a>

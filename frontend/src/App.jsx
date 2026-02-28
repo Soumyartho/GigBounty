@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import Toast from './components/Toast';
 import useWallet from './hooks/useWallet';
 import { api } from './services/api';
+import { buildEscrowPayment, submitTransaction, getEscrowAddress } from './services/algorand';
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -14,6 +15,11 @@ import BountyBoardPage from './pages/BountyBoardPage';
 import TaskDetailPage from './pages/TaskDetailPage';
 import PostTaskPage from './pages/PostTaskPage';
 import MyTasksPage from './pages/MyTasksPage';
+import AboutPage from './pages/AboutPage';
+import ForBusinessPage from './pages/ForBusinessPage';
+import LeaderboardPage from './pages/LeaderboardPage';
+import WalletPage from './pages/WalletPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 // Demo tasks for when backend is not running
 const DEMO_TASKS = [
@@ -92,7 +98,7 @@ const DEMO_TASKS = [
 ];
 
 function App() {
-  const { walletAddress, connecting, connect, disconnect } = useWallet();
+  const { walletAddress, connecting, connect, disconnect, signTransactions } = useWallet();
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [proofModal, setProofModal] = useState(null);
@@ -141,7 +147,7 @@ function App() {
     showToast('Wallet disconnected', 'info');
   };
 
-  // Create task
+  // Create task — builds escrow payment, signs via Pera, then creates task
   const handleCreateTask = async (taskData) => {
     if (useDemo) {
       const newTask = {
@@ -158,11 +164,29 @@ function App() {
     }
 
     try {
-      await api.createTask(taskData);
-      showToast('Bounty posted and ALGO locked in escrow!');
+      let txId = null;
+
+      // Try to do real escrow deposit
+      const escrowAddr = await getEscrowAddress();
+      if (escrowAddr && walletAddress && signTransactions) {
+        showToast('Building escrow transaction...', 'info');
+        const txn = await buildEscrowPayment(walletAddress, taskData.amount);
+        showToast('Please approve the transaction in Pera Wallet...', 'info');
+        const signedTxns = await signTransactions([txn]);
+        showToast('Submitting to Algorand TestNet...', 'info');
+        txId = await submitTransaction(signedTxns[0]);
+      }
+
+      // Create task in backend with the tx_id
+      await api.createTask({ ...taskData, tx_id: txId });
+      showToast(`Bounty posted! ${txId ? 'ALGO locked in escrow on TestNet.' : 'Escrow recorded.'}`);
       fetchTasks();
     } catch (err) {
-      showToast(err.message || 'Failed to create task', 'error');
+      if (err?.message?.includes('cancelled') || err?.data?.type === 'CONNECT_MODAL_CLOSED') {
+        showToast('Transaction cancelled by user', 'info');
+      } else {
+        showToast(err.message || 'Failed to create task', 'error');
+      }
       throw err;
     }
   };
@@ -301,6 +325,23 @@ function App() {
               />
             }
           />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/business" element={<ForBusinessPage />} />
+          <Route
+            path="/leaderboard"
+            element={<LeaderboardPage tasks={tasks} />}
+          />
+          <Route
+            path="/wallet"
+            element={
+              <WalletPage
+                walletAddress={walletAddress}
+                tasks={tasks}
+                onConnect={handleConnect}
+              />
+            }
+          />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
 

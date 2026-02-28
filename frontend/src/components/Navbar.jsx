@@ -62,12 +62,29 @@ export default function Navbar({ walletAddress, onConnect, onDisconnect }) {
               Post a Task
             </NavLink>
           </li>
+          <li>
+            <NavLink to="/leaderboard" className={({ isActive }) => isActive ? 'nav-active' : ''}>
+              Leaderboard
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/about" className={({ isActive }) => isActive ? 'nav-active' : ''}>
+              About
+            </NavLink>
+          </li>
           {walletAddress && (
-            <li>
-              <NavLink to="/my-tasks" className={({ isActive }) => isActive ? 'nav-active' : ''}>
-                My Tasks
-              </NavLink>
-            </li>
+            <>
+              <li>
+                <NavLink to="/my-tasks" className={({ isActive }) => isActive ? 'nav-active' : ''}>
+                  My Tasks
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/wallet" className={({ isActive }) => isActive ? 'nav-active' : ''}>
+                  Wallet
+                </NavLink>
+              </li>
+            </>
           )}
         </ul>
 

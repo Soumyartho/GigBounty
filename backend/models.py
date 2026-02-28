@@ -17,6 +17,7 @@ class TaskCreate(BaseModel):
     amount: float = Field(..., gt=0)
     creator_wallet: str = Field(..., min_length=10)
     deadline: Optional[str] = None
+    tx_id: Optional[str] = None
 
 
 class TaskClaim(BaseModel):
