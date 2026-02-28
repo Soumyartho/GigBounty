@@ -60,7 +60,7 @@ export async function buildEscrowPayment(senderAddr, amountAlgo) {
     to: escrowAddr,
     amount: amountMicroAlgos,
     suggestedParams,
-    note: new Uint8Array(Buffer.from('GigBounty Escrow Deposit')),
+    note: new TextEncoder().encode('GigBounty Escrow Deposit'),
   });
 
   return txn;

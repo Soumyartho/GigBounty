@@ -22,6 +22,9 @@ export default function TaskCard({ task, walletAddress, onClaim, onSubmitProof, 
       CLAIMED: 'badge-claimed',
       SUBMITTED: 'badge-submitted',
       COMPLETED: 'badge-completed',
+      CANCELLED: 'badge-cancelled',
+      EXPIRED: 'badge-expired',
+      DISPUTED: 'badge-disputed',
     };
     return <span className={`badge ${classes[status] || 'badge-open'}`}>{status}</span>;
   };
