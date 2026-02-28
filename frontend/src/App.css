@@ -235,9 +235,16 @@
   margin-bottom: var(--space-tight);
 }
 
-.hero-float-card .card-line:nth-child(1) { width: 60%; }
-.hero-float-card .card-line:nth-child(2) { width: 90%; }
-.hero-float-card .card-line:nth-child(3) { width: 45%; background: var(--accent-green); }
+.hero-float-card .card-line:nth-child(1) {
+  width: 60%;
+}
+.hero-float-card .card-line:nth-child(2) {
+  width: 90%;
+}
+.hero-float-card .card-line:nth-child(3) {
+  width: 45%;
+  background: var(--accent-green);
+}
 
 .hero-float-badge {
   position: absolute;
@@ -379,9 +386,9 @@
   border: 1px solid var(--border-light);
   border-radius: var(--radius-pill);
   background: transparent;
-  color: var(--text-secondary);
+  color: #000000;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all var(--transition-fast);
   text-transform: uppercase;
@@ -390,9 +397,9 @@
 
 .filter-btn:hover,
 .filter-btn.active {
-  background: var(--accent-black);
-  color: var(--bg-card);
-  border-color: var(--accent-black);
+  background: var(--accent-green);
+  color: var(--accent-black);
+  border-color: var(--accent-green);
 }
 
 .task-grid {
@@ -495,7 +502,7 @@
 
 /* Task card accent stripe */
 .task-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -504,10 +511,18 @@
   border-radius: var(--radius-default) var(--radius-default) 0 0;
 }
 
-.task-card[data-status="OPEN"]::before { background: var(--accent-green); }
-.task-card[data-status="CLAIMED"]::before { background: var(--accent-blue); }
-.task-card[data-status="SUBMITTED"]::before { background: var(--accent-yellow); }
-.task-card[data-status="COMPLETED"]::before { background: var(--accent-coral); }
+.task-card[data-status="OPEN"]::before {
+  background: var(--accent-green);
+}
+.task-card[data-status="CLAIMED"]::before {
+  background: var(--accent-blue);
+}
+.task-card[data-status="SUBMITTED"]::before {
+  background: var(--accent-yellow);
+}
+.task-card[data-status="COMPLETED"]::before {
+  background: var(--accent-coral);
+}
 
 /* ============================================================
    POST TASK FORM
@@ -527,7 +542,7 @@
 }
 
 .post-task-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -60px;
   right: -50px;
@@ -631,6 +646,13 @@
   padding: var(--space-section);
   text-align: center;
   position: relative;
+  transition: border-color 300ms ease, box-shadow 300ms ease, transform 300ms ease;
+}
+
+.step-card:hover {
+  border-color: rgba(163, 230, 53, 0.8);
+  box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.35), 0 0 24px rgba(163, 230, 53, 0.3), 0 0 48px rgba(163, 230, 53, 0.1);
+  transform: translateY(-3px);
 }
 
 .step-number {
@@ -782,11 +804,21 @@
     height: 260px;
   }
 
-  .hero-float-card-1 { width: 220px; left: 20px; }
-  .hero-float-card-2 { width: 190px; }
-  .hero-float-card-3 { width: 170px; }
+  .hero-float-card-1 {
+    width: 220px;
+    left: 20px;
+  }
+  .hero-float-card-2 {
+    width: 190px;
+  }
+  .hero-float-card-3 {
+    width: 170px;
+  }
 
-  .hero-circle-1 { width: 260px; height: 260px; }
+  .hero-circle-1 {
+    width: 260px;
+    height: 260px;
+  }
 
   .task-grid {
     grid-template-columns: 1fr;
