@@ -2,16 +2,20 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import TaskCard from './TaskCard';
 import SkeletonLoader from './SkeletonLoader';
-import { fadeUp, staggerContainer, useScrollRevealProps, buttonHover, buttonTap } from '../lib/motion';
+import { fadeUp, buttonHover, buttonTap } from '../lib/motion';
 import { useReducedMotion } from 'framer-motion';
 
 const FILTERS = ['All', 'Open', 'Claimed', 'Submitted', 'Completed'];
-const gridContainer = staggerContainer(0.08);
-const cardVariant = fadeUp(20);
+
+// Each card animates independently — no parent orchestration needed
+const cardAnim = (i) => ({
+  initial: { opacity: 0, y: 18 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.38, ease: [0.22, 1, 0.36, 1], delay: i * 0.07 },
+});
 
 export default function TaskBoard({ tasks, loading, walletAddress, onClaim, onSubmitProof, onApprove }) {
   const [activeFilter, setActiveFilter] = useState('All');
-  const scrollProps = useScrollRevealProps();
   const prefersReduced = useReducedMotion();
 
   const filteredTasks = activeFilter === 'All'
@@ -21,11 +25,12 @@ export default function TaskBoard({ tasks, loading, walletAddress, onClaim, onSu
   return (
     <section className="task-board" id="tasks">
       <div className="container">
+        {/* Header */}
         <motion.div
           className="task-board-header"
-          variants={fadeUp(16)}
-          initial="hidden"
-          animate="visible"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         >
           <div>
             <h2>Bounty Board</h2>
@@ -49,12 +54,8 @@ export default function TaskBoard({ tasks, loading, walletAddress, onClaim, onSu
           </div>
         </motion.div>
 
-        <motion.div
-          className="task-grid"
-          variants={gridContainer}
-          initial="hidden"
-          animate="visible"
-        >
+        {/* Grid — plain div, each card self-animates */}
+        <div className="task-grid">
           {loading ? (
             <>
               <SkeletonLoader type="card" />
@@ -65,8 +66,12 @@ export default function TaskBoard({ tasks, loading, walletAddress, onClaim, onSu
               <SkeletonLoader type="card" />
             </>
           ) : filteredTasks.length > 0 ? (
-            filteredTasks.map(task => (
-              <motion.div key={task.id} variants={cardVariant} style={{ height: '100%' }}>
+            filteredTasks.map((task, i) => (
+              <motion.div
+                key={task.id}
+                style={{ height: '100%' }}
+                {...(prefersReduced ? {} : cardAnim(i))}
+              >
                 <TaskCard
                   task={task}
                   walletAddress={walletAddress}
@@ -87,7 +92,7 @@ export default function TaskBoard({ tasks, loading, walletAddress, onClaim, onSu
               </p>
             </div>
           )}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
