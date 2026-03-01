@@ -1,6 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import StepperHorizontal from '../components/StepperHorizontal';
+import { useRole } from '../context/RoleContext';
+import { api } from '../services/api';
 
 export default function TaskDetailPage({ tasks, walletAddress, onClaim, onSubmitProof, onApprove, onCancel, onDispute, useDemo }) {
   const { id } = useParams();
@@ -8,6 +10,9 @@ export default function TaskDetailPage({ tasks, walletAddress, onClaim, onSubmit
   const task = tasks.find(t => t.id === id);
   const [disputeReason, setDisputeReason] = useState('');
   const [showDisputeForm, setShowDisputeForm] = useState(false);
+  const { role: userRole } = useRole();
+  const [aiResult, setAiResult] = useState(null);
+  const [aiLoading, setAiLoading] = useState(false);
 
   if (!task) {
     return (
@@ -205,8 +210,8 @@ export default function TaskDetailPage({ tasks, walletAddress, onClaim, onSubmit
           {/* Actions card */}
           <div className="task-detail-card">
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {/* OPEN — Claim (non-creator) */}
-              {task.status === 'OPEN' && !isCreator && walletAddress && (
+              {/* OPEN — Claim (acceptor role only) */}
+              {task.status === 'OPEN' && userRole === 'acceptor' && !isCreator && walletAddress && (
                 <button className="btn btn-primary btn-full" onClick={() => onClaim?.(task.id)}>
                   ⚡ Claim This Bounty
                 </button>
@@ -218,22 +223,21 @@ export default function TaskDetailPage({ tasks, walletAddress, onClaim, onSubmit
                 </p>
               )}
 
-              {/* OPEN — Cancel (creator only) */}
-              {task.status === 'OPEN' && isCreator && (
+              {/* OPEN — Poster view */}
+              {task.status === 'OPEN' && userRole === 'poster' && (
                 <>
                   <p className="text-small" style={{ textAlign: 'center' }}>
                     Your task — awaiting claims
                   </p>
-                  <button
-                    className="btn btn-danger btn-full"
-                    onClick={() => onCancel?.(task.id)}
-                  >
-                    🚫 Cancel & Refund
-                  </button>
+                  {isCreator && (
+                    <button className="btn btn-danger btn-full" onClick={() => onCancel?.(task.id)}>
+                      🚫 Cancel & Refund
+                    </button>
+                  )}
                 </>
               )}
 
-              {/* CLAIMED — Submit proof (worker) */}
+              {/* CLAIMED — Submit proof (worker/acceptor) */}
               {task.status === 'CLAIMED' && isWorker && (
                 <button className="btn btn-primary btn-full" onClick={() => onSubmitProof?.(task.id)}>
                   📎 Submit Proof
@@ -246,16 +250,38 @@ export default function TaskDetailPage({ tasks, walletAddress, onClaim, onSubmit
                 </p>
               )}
 
-              {/* SUBMITTED — Approve (creator) */}
-              {task.status === 'SUBMITTED' && isCreator && (
-                <button className="btn btn-primary btn-full" onClick={() => onApprove?.(task.id)}>
-                  ✅ Approve & Release Payment
-                </button>
+              {/* SUBMITTED — AI Verify + Approve (poster role) */}
+              {task.status === 'SUBMITTED' && (userRole === 'poster' || isCreator) && (
+                <>
+                  {/* AI Verify button */}
+                  <button
+                    className="btn btn-secondary btn-full"
+                    disabled={aiLoading}
+                    onClick={async () => {
+                      setAiLoading(true);
+                      try {
+                        const res = await api.aiVerify(task.id);
+                        setAiResult(res);
+                      } catch (err) {
+                        setAiResult({ ai_result: { score: 0, verdict: 'ERROR', reasoning: err.message }, audit_report: '' });
+                      } finally {
+                        setAiLoading(false);
+                      }
+                    }}
+                  >
+                    {aiLoading ? '🔄 Running AI Audit...' : '🤖 Run AI Verification'}
+                  </button>
+
+                  {/* Approve button */}
+                  <button className="btn btn-primary btn-full" onClick={() => onApprove?.(task.id)}>
+                    ✅ Approve & Release Payment
+                  </button>
+                </>
               )}
 
-              {task.status === 'SUBMITTED' && !isCreator && (
+              {task.status === 'SUBMITTED' && userRole === 'acceptor' && !isCreator && (
                 <p className="text-small" style={{ textAlign: 'center' }}>
-                  Proof submitted — awaiting creator approval
+                  Proof submitted — awaiting poster approval
                 </p>
               )}
 
@@ -336,6 +362,44 @@ export default function TaskDetailPage({ tasks, walletAddress, onClaim, onSubmit
               )}
             </div>
           </div>
+
+          {/* AI Audit Report */}
+          {aiResult && (
+            <div className="task-detail-card" style={{ marginTop: '16px' }}>
+              <h3 style={{ fontSize: '14px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', marginBottom: '16px' }}>
+                🤖 AI Audit Report
+              </h3>
+              <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
+                <div style={{
+                  padding: '12px 20px', borderRadius: '12px',
+                  background: aiResult.ai_result?.verdict === 'PASS' ? '#D1FAE5' : '#FEE2E2',
+                  fontWeight: 700, fontSize: '14px',
+                  color: aiResult.ai_result?.verdict === 'PASS' ? '#065F46' : '#991B1B'
+                }}>
+                  {aiResult.ai_result?.verdict === 'PASS' ? '✅ PASS' : '❌ FAIL'}
+                </div>
+                <div style={{
+                  padding: '12px 20px', borderRadius: '12px',
+                  background: '#F3F4F6', fontWeight: 700, fontSize: '14px'
+                }}>
+                  Score: {((aiResult.ai_result?.score || 0) * 100).toFixed(0)}%
+                </div>
+              </div>
+              <p style={{ fontSize: '15px', lineHeight: 1.6, marginBottom: '16px' }}>
+                {aiResult.ai_result?.reasoning}
+              </p>
+              {aiResult.audit_report && (
+                <div style={{
+                  padding: '16px', borderRadius: '12px', background: '#F9FAFB',
+                  border: '1px solid #E5E7EB', fontSize: '13px', lineHeight: 1.7,
+                  whiteSpace: 'pre-wrap', fontFamily: 'var(--font-body)',
+                  maxHeight: '400px', overflow: 'auto'
+                }}>
+                  {aiResult.audit_report}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
