@@ -493,6 +493,7 @@
     0 2px 6px rgba(0, 0, 0, 0.04),
     0 8px 28px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(0, 0, 0, 0.05);
+  border-top: 3px solid #FBBF24;
   transition: box-shadow 220ms ease, transform 200ms ease;
   position: relative;
   overflow: hidden;
@@ -513,11 +514,15 @@
   margin-bottom: 16px;
 }
 
-/* Amount block */
+/* Amount block — highlighted yellow chip */
 .tc-amount-wrap {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
+  background: #FFFBEB;
+  border: 1.5px solid #FDE68A;
+  border-radius: 14px;
+  padding: 8px 14px;
 }
 
 .tc-amount-label {
@@ -526,7 +531,7 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #9ca3af;
+  color: #D97706;
 }
 
 .tc-amount {
@@ -537,7 +542,7 @@
 
 .tc-amount-num {
   font-family: var(--font-display);
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 800;
   color: #111111;
   line-height: 1;
@@ -546,9 +551,9 @@
 
 .tc-amount-sym {
   font-family: var(--font-ui);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  color: #6b7280;
+  color: #D97706;
   letter-spacing: 0.04em;
 }
 
