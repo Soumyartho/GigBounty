@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { FiAward, FiCpu } from 'react-icons/fi';
 import { fadeUp, staggerContainer, cardHover, buttonHover, buttonTap, useScrollRevealProps } from '../lib/motion';
 
 const sectionContainer = staggerContainer(0.1, 0.1);
@@ -35,7 +36,7 @@ export default function AboutPage() {
           <motion.div className="models-grid" variants={sectionContainer} {...scrollProps}>
             {/* B2C */}
             <motion.div className="model-card" variants={cardVariant} whileHover={prefersReduced ? {} : cardHover}>
-              <div className="model-icon" style={{ background: '#D1FAE5' }}>🎯</div>
+              <div className="model-icon" style={{ background: '#D1FAE5' }}><FiAward size={28} color="#16a34a" /></div>
               <span className="model-label">FOR FREELANCERS</span>
               <h3>Bounty Board</h3>
               <p>
@@ -60,7 +61,7 @@ export default function AboutPage() {
 
             {/* B2B */}
             <motion.div className="model-card" variants={cardVariant} whileHover={prefersReduced ? {} : cardHover}>
-              <div className="model-icon" style={{ background: '#DBEAFE' }}>🔌</div>
+              <div className="model-icon" style={{ background: '#DBEAFE' }}><FiCpu size={28} color="#2563eb" /></div>
               <span className="model-label">FOR PLATFORMS</span>
               <h3>Plugin Integration</h3>
               <p>
