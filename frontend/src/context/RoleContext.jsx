@@ -25,10 +25,19 @@ export function RoleProvider({ children, walletAddress }) {
     const cached = localStorage.getItem(cacheKey(walletAddress));
     if (cached === 'poster' || cached === 'acceptor') {
       setRoleState(cached);
+      // Sync quietly from backend in background (don't block)
+      api.getWalletRole(walletAddress)
+        .then(({ role: r }) => {
+          if (r === 'poster' || r === 'acceptor') {
+            setRoleState(r);
+            localStorage.setItem(cacheKey(walletAddress), r);
+          }
+        })
+        .catch(() => {});
       return;
     }
 
-    // Fetch from backend
+    // No cache — try backend, fall back gracefully
     setLoading(true);
     api.getWalletRole(walletAddress)
       .then(({ role: r }) => {
@@ -39,19 +48,21 @@ export function RoleProvider({ children, walletAddress }) {
           setRoleState(null);
         }
       })
-      .catch(() => setRoleState(null))
+      .catch(() => {
+        // Backend unavailable — just show role selector
+        setRoleState(null);
+      })
       .finally(() => setLoading(false));
   }, [walletAddress]);
 
   const setRole = useCallback(async (newRole) => {
     if (!walletAddress) return;
-    try {
-      await api.setWalletRole(walletAddress, newRole);
-      localStorage.setItem(cacheKey(walletAddress), newRole);
-      setRoleState(newRole);
-    } catch (err) {
-      console.error('Failed to save role:', err);
-    }
+    // ✅ Set locally FIRST — instant feedback, works even if backend is down
+    localStorage.setItem(cacheKey(walletAddress), newRole);
+    setRoleState(newRole);
+    // Sync to backend in background (don't block on failure)
+    api.setWalletRole(walletAddress, newRole)
+      .catch((err) => console.warn('Role sync to backend failed (demo mode?):', err));
   }, [walletAddress]);
 
   const clearRole = useCallback(() => {
