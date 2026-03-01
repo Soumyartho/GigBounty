@@ -41,13 +41,15 @@ export default function AboutPage() {
               <h3>Bounty Board</h3>
               <p>
                 Post tasks with ALGO bounties, claim work, submit proof, and get paid instantly —
-                no middlemen, no payment delays, no disputes.
+                no middlemen, no payment delays, no disputes. Use our own platform and get your work
+                done at a fraction of the cost compared to traditional freelancing platforms.
               </p>
               <ul className="model-features">
                 <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M8 12l3 3 5-5" /></svg> Escrow-locked payments</li>
                 <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M8 12l3 3 5-5" /></svg> Instant payout on approval</li>
                 <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M8 12l3 3 5-5" /></svg> AI-assisted work verification</li>
                 <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M8 12l3 3 5-5" /></svg> Transaction-level transparency</li>
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FBBF24" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M8 12l3 3 5-5" /></svg> <strong>Only 0.1% platform fee</strong> — industry's lowest</li>
               </ul>
               <motion.button
                 className="btn btn-primary"
@@ -204,7 +206,7 @@ export default function AboutPage() {
             {[
               { q: 'What is ALGO?', a: 'ALGO is the native cryptocurrency of the Algorand blockchain. On TestNet, it\'s free play money for development.' },
               { q: 'Do I need a crypto wallet?', a: 'Yes — you\'ll need Pera Wallet (free app) to connect and sign transactions. We provide a mock mode for demos.' },
-              { q: 'What\'s the platform fee?', a: 'We charge 3% on every released payout. The task poster pays the bounty, and 3% is deducted as our fee.' },
+              { q: 'What\'s the platform fee?', a: 'Using GigBounty directly? Just 0.1% — the industry\'s lowest. Compare that to Upwork (20%), Fiverr (20%), or Freelancer (10%). For platforms integrating via our plugin API, we charge 3% to cover AI verification, pricing suggestions, and blockchain payment infrastructure.' },
               { q: 'Can freelancing platforms integrate GigBounty?', a: 'Absolutely! We offer a plugin API that handles verification and payments. Visit the For Business page to learn more.' },
               { q: 'Is this on the real blockchain?', a: 'During development we use TestNet (fake ALGO). For production, we switch to MainNet with real value.' },
             ].map((item, i) => (
