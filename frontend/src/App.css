@@ -601,10 +601,16 @@
   max-width: 680px;
   margin: 0 auto;
   background: var(--bg-card);
-  border: 1px solid var(--border-light);
+  border: 2px solid transparent;
   border-radius: var(--radius-default);
   padding: var(--space-section);
   position: relative;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.post-task-card:hover {
+  border-color: var(--border-dark);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
 }
 
 
