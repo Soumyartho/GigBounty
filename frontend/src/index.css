@@ -4,7 +4,7 @@
    ============================================================ */
 
 /* --- Google Fonts --- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Syne:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap');
 
 /* ============================================================
    PART 1 — DESIGN TOKENS (CSS Custom Properties)
@@ -54,8 +54,9 @@
   --max-reading: 680px;
 
   /* Typography */
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-display: 'Syne', 'Inter', sans-serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Space Grotesk', 'DM Sans', sans-serif;
+  --font-ui: 'Poppins', 'DM Sans', sans-serif;
 }
 
 /* ============================================================
@@ -144,6 +145,7 @@ p {
 .text-small {
   font-size: 14px;
   color: var(--text-muted);
+  font-family: var(--font-ui);
 }
 
 .text-label {
@@ -152,6 +154,7 @@ p {
   letter-spacing: 0.1em;
   font-weight: 600;
   color: var(--text-secondary);
+  font-family: var(--font-ui);
 }
 
 /* ============================================================
@@ -331,6 +334,7 @@ p {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  font-family: var(--font-ui);
 }
 
 .badge-open {
