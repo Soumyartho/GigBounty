@@ -1,6 +1,8 @@
 /**
- * RoleContext — ties role (poster | acceptor) to the Pera Wallet address.
- * Fetches from backend on wallet connect. Caches in localStorage per address.
+ * RoleContext — session-first role system.
+ * Flow: Choose role FIRST → then connect wallet → session locked until disconnect.
+ * Role is stored in localStorage immediately (no wallet needed to pick).
+ * On wallet connect, role syncs to backend.
  */
 
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
@@ -8,65 +10,46 @@ import { api } from '../services/api';
 
 const RoleContext = createContext(null);
 
-const cacheKey = (address) => `gigbounty_role_${address}`;
+const SESSION_ROLE_KEY = 'gigbounty_session_role';
+const walletRoleKey = (addr) => `gigbounty_role_${addr}`;
 
 export function RoleProvider({ children, walletAddress }) {
-  const [role, setRoleState] = useState(null);
+  const [role, setRoleState] = useState(() => {
+    // On mount, check if there's a session role already picked
+    return localStorage.getItem(SESSION_ROLE_KEY) || null;
+  });
   const [loading, setLoading] = useState(false);
 
-  // When wallet changes, load role from cache or backend
+  // When wallet connects and role exists, sync to backend
   useEffect(() => {
-    if (!walletAddress) {
-      setRoleState(null);
-      return;
-    }
+    if (!walletAddress || !role) return;
 
-    // Try localStorage cache first (instant)
-    const cached = localStorage.getItem(cacheKey(walletAddress));
-    if (cached === 'poster' || cached === 'acceptor') {
-      setRoleState(cached);
-      // Sync quietly from backend in background (don't block)
-      api.getWalletRole(walletAddress)
-        .then(({ role: r }) => {
-          if (r === 'poster' || r === 'acceptor') {
-            setRoleState(r);
-            localStorage.setItem(cacheKey(walletAddress), r);
-          }
-        })
-        .catch(() => {});
-      return;
-    }
+    // Sync current session role to backend (fire-and-forget)
+    api.setWalletRole(walletAddress, role)
+      .catch(() => {});
+  }, [walletAddress, role]);
 
-    // No cache — try backend, fall back gracefully
-    setLoading(true);
-    api.getWalletRole(walletAddress)
-      .then(({ role: r }) => {
-        if (r === 'poster' || r === 'acceptor') {
-          setRoleState(r);
-          localStorage.setItem(cacheKey(walletAddress), r);
-        } else {
-          setRoleState(null);
-        }
-      })
-      .catch(() => {
-        // Backend unavailable — just show role selector
-        setRoleState(null);
-      })
-      .finally(() => setLoading(false));
-  }, [walletAddress]);
-
-  const setRole = useCallback(async (newRole) => {
-    if (!walletAddress) return;
-    // ✅ Set locally FIRST — instant feedback, works even if backend is down
-    localStorage.setItem(cacheKey(walletAddress), newRole);
+  /**
+   * Set role — works without wallet. Stores immediately.
+   */
+  const setRole = useCallback((newRole) => {
+    if (newRole !== 'poster' && newRole !== 'acceptor') return;
+    localStorage.setItem(SESSION_ROLE_KEY, newRole);
     setRoleState(newRole);
-    // Sync to backend in background (don't block on failure)
-    api.setWalletRole(walletAddress, newRole)
-      .catch((err) => console.warn('Role sync to backend failed (demo mode?):', err));
+
+    // If wallet is already connected, sync to backend too
+    if (walletAddress) {
+      api.setWalletRole(walletAddress, newRole)
+        .catch((err) => console.warn('Role sync failed:', err));
+    }
   }, [walletAddress]);
 
+  /**
+   * Clear role — resets session. Called on wallet disconnect or manual switch.
+   */
   const clearRole = useCallback(() => {
-    if (walletAddress) localStorage.removeItem(cacheKey(walletAddress));
+    localStorage.removeItem(SESSION_ROLE_KEY);
+    if (walletAddress) localStorage.removeItem(walletRoleKey(walletAddress));
     setRoleState(null);
   }, [walletAddress]);
 

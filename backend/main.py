@@ -352,7 +352,8 @@ async def ai_verify_task(data: TaskApprove):
 
     return {
         "task_id": data.task_id,
-        "ai_result": result
+        "ai_result": result,
+        "audit_report": result.get("audit_report", "")
     }
 
 

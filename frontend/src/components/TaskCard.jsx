@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { cardHover, buttonHover, buttonTap } from '../lib/motion';
+import { useRole } from '../context/RoleContext';
 
 const STATUS_META = {
   OPEN:      { label: 'Open',      color: '#3a7d00', bg: 'rgba(163,230,53,0.13)', border: 'rgba(163,230,53,0.4)' },
@@ -19,6 +20,7 @@ export default function TaskCard({ task, walletAddress, onClaim, onSubmitProof, 
   const isCreator = walletAddress && creator_wallet === walletAddress;
   const isWorker  = walletAddress && worker_wallet  === walletAddress;
   const meta = STATUS_META[status] || STATUS_META.OPEN;
+  const { role: userRole } = useRole();
 
   const formatDeadline = (dl) => {
     if (!dl) return null;
@@ -30,15 +32,18 @@ export default function TaskCard({ task, walletAddress, onClaim, onSubmitProof, 
     navigate(`/tasks/${id}`);
   };
 
-  // What CTA to show
+  // What CTA to show — role-based access control
   const renderCTA = () => {
-    if (status === 'OPEN' && !isCreator && walletAddress)
+    // Acceptors (workers) can claim open tasks (but not their own)
+    if (status === 'OPEN' && userRole === 'acceptor' && !isCreator && walletAddress)
       return <motion.button className="tc-btn tc-btn--primary" onClick={() => onClaim?.(id)} whileHover={prefersReduced ? {} : buttonHover} whileTap={prefersReduced ? {} : buttonTap}>Claim Task →</motion.button>;
 
+    // Workers can submit proof
     if (status === 'CLAIMED' && isWorker)
       return <motion.button className="tc-btn tc-btn--primary" onClick={() => onSubmitProof?.(id)} whileHover={prefersReduced ? {} : buttonHover} whileTap={prefersReduced ? {} : buttonTap}>Submit Proof →</motion.button>;
 
-    if (status === 'SUBMITTED' && isCreator)
+    // Posters can approve submitted work
+    if (status === 'SUBMITTED' && userRole === 'poster' && isCreator)
       return <motion.button className="tc-btn tc-btn--primary" onClick={() => onApprove?.(id)} whileHover={prefersReduced ? {} : buttonHover} whileTap={prefersReduced ? {} : buttonTap}>Approve & Pay →</motion.button>;
 
     if (status === 'OPEN' && isCreator)

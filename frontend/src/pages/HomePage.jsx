@@ -15,7 +15,7 @@ import { fadeUp, staggerContainer, cardHover, buttonHover, buttonTap, useScrollR
 const gridContainer = staggerContainer(0.08);
 const cardVariant = fadeUp(20);
 
-export default function HomePage({ tasks, walletAddress }) {
+export default function HomePage({ tasks, walletAddress, onConnect }) {
   const navigate = useNavigate();
   const scrollProps = useScrollRevealProps();
   const prefersReduced = useReducedMotion();
@@ -23,7 +23,7 @@ export default function HomePage({ tasks, walletAddress }) {
 
   // Show role selector if no role is set (or loading)
   if (!role && !loading) {
-    return <RoleSelector walletAddress={walletAddress} />;
+    return <RoleSelector walletAddress={walletAddress} onConnect={onConnect} />;
   }
 
   // Loading state — minimal flicker

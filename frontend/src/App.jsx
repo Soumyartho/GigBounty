@@ -147,9 +147,11 @@ function App() {
     }
   };
 
-  // Handle wallet disconnect
+  // Handle wallet disconnect — also clears role to reset session
   const handleDisconnect = () => {
     disconnect();
+    // Clear role on disconnect so user must re-pick on next session
+    localStorage.removeItem('gigbounty_session_role');
     showToast('Wallet disconnected', 'info');
   };
 
@@ -345,7 +347,7 @@ function App() {
 
       <main>
         <Routes>
-          <Route path="/" element={<HomePage tasks={tasks} walletAddress={walletAddress} />} />
+          <Route path="/" element={<HomePage tasks={tasks} walletAddress={walletAddress} onConnect={handleConnect} />} />
           <Route
             path="/tasks"
             element={

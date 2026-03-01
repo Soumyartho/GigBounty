@@ -1,10 +1,10 @@
 /**
- * RoleSelector — full-screen role picker shown when no role is set.
- * Cards are dimmed if wallet is not connected.
+ * RoleSelector — full-screen role picker.
+ * Step 1: Pick role (always enabled, no wallet needed)
+ * Step 2: Connect wallet (shown after role picked)
  */
 
-import { useState } from 'react';
-import { FiBriefcase, FiZap, FiLock } from 'react-icons/fi';
+import { FiBriefcase, FiZap, FiArrowRight } from 'react-icons/fi';
 import { useRole } from '../context/RoleContext';
 
 const roles = [
@@ -14,7 +14,7 @@ const roles = [
     label: 'BOUNTY POSTER',
     title: 'Post Tasks,\nGet Results',
     description:
-      'You have work that needs doing. Post a bounty, lock ALGO in escrow, review the submission, and release payment instantly — no middlemen, no delays.',
+      'You have work that needs doing. Post a bounty, lock ALGO in escrow, review submissions, and release payment instantly.',
     perks: ['Lock ALGO in escrow', 'AI-verified submissions', 'Release or dispute anytime'],
     cta: 'I want to Post Bounties',
     accent: '#A3E635',
@@ -28,7 +28,7 @@ const roles = [
     label: 'BOUNTY ACCEPTOR',
     title: 'Claim Tasks,\nEarn ALGO',
     description:
-      'You bring the skill. Browse open bounties, claim the ones you want, submit your proof, and get paid — directly to your wallet, every time.',
+      'Browse open bounties, claim the ones you want, submit your proof, and get paid — directly to your wallet.',
     perks: ['Browse all open bounties', 'Submit proof of work', 'Instant ALGO payout on approval'],
     cta: 'I want to Earn ALGO',
     accent: '#2563EB',
@@ -38,73 +38,87 @@ const roles = [
   },
 ];
 
-export default function RoleSelector({ walletAddress }) {
-  const { setRole } = useRole();
-  const [selecting, setSelecting] = useState(null);
+export default function RoleSelector({ walletAddress, onConnect }) {
+  const { role, setRole } = useRole();
   const isConnected = !!walletAddress;
 
-  const handleSelect = async (roleId) => {
-    if (!isConnected) return;
-    setSelecting(roleId);
-    await setRole(roleId);
-    setSelecting(null);
-  };
+  // Step 2: role is picked but wallet not connected yet
+  if (role && !isConnected) {
+    const picked = roles.find(r => r.id === role);
+    return (
+      <div className="role-selector">
+        <div className="role-selector-inner">
+          <div className="role-selector-header">
+            <span className="role-selector-badge">STEP 2 OF 2</span>
+            <h1 className="role-selector-title">
+              Now <span className="text-highlight">Connect</span> Your Wallet
+            </h1>
+            <p className="role-selector-sub">
+              You chose <strong>{picked?.label}</strong>. Connect your Pera Wallet to start.
+            </p>
+          </div>
 
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+            <button
+              className="btn btn-primary"
+              onClick={onConnect}
+              style={{ padding: '16px 40px', fontSize: '16px', borderRadius: '14px' }}
+            >
+              Connect Pera Wallet →
+            </button>
+            <button
+              className="role-banner-switch"
+              onClick={() => setRole(null) || localStorage.removeItem('gigbounty_session_role')}
+              style={{ marginTop: '8px' }}
+            >
+              ← Go Back & Change Role
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Step 1: Pick your role (no wallet needed)
   return (
     <div className="role-selector">
       <div className="role-selector-inner">
         {/* Header */}
         <div className="role-selector-header">
-          <span className="role-selector-badge">CHOOSE YOUR ROLE</span>
+          <span className="role-selector-badge">STEP 1 OF 2 — CHOOSE YOUR ROLE</span>
           <h1 className="role-selector-title">
             How do you want to<br />
             use <span className="text-highlight">GigBounty</span>?
           </h1>
           <p className="role-selector-sub">
-            Your role is tied to your wallet — switch anytime from the nav.
+            Pick your role first. You'll connect your wallet next.
           </p>
-          {!isConnected && (
-            <div className="role-selector-warning">
-              <FiLock size={14} />
-              Connect your Pera Wallet above to choose a role
-            </div>
-          )}
         </div>
 
-        {/* Cards */}
+        {/* Cards — always active */}
         <div className="role-cards">
           {roles.map((r) => {
             const Icon = r.icon;
-            const isLoading = selecting === r.id;
             return (
               <button
                 key={r.id}
-                className={`role-card${!isConnected ? ' role-card--locked' : ''}`}
+                className="role-card"
                 style={{
                   '--rc-accent': r.accent,
                   '--rc-accent-text': r.accentText,
                   '--rc-bg': r.bg,
                   '--rc-border': r.border,
                 }}
-                onClick={() => handleSelect(r.id)}
-                disabled={!isConnected || !!selecting}
+                onClick={() => setRole(r.id)}
                 aria-label={r.cta}
               >
-                {/* Icon */}
                 <div className="role-card-icon">
                   <Icon size={32} />
                 </div>
-
-                {/* Label */}
                 <span className="role-card-label">{r.label}</span>
-
-                {/* Title */}
                 <h2 className="role-card-title">{r.title}</h2>
-
-                {/* Description */}
                 <p className="role-card-desc">{r.description}</p>
 
-                {/* Perks */}
                 <ul className="role-card-perks">
                   {r.perks.map((p) => (
                     <li key={p}>
@@ -116,9 +130,8 @@ export default function RoleSelector({ walletAddress }) {
                   ))}
                 </ul>
 
-                {/* CTA */}
                 <div className="role-card-cta">
-                  {isLoading ? 'Saving…' : !isConnected ? <><FiLock size={13} /> Connect Wallet</> : r.cta}
+                  {r.cta} <FiArrowRight size={14} />
                 </div>
               </button>
             );
