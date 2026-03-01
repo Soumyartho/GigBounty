@@ -24,7 +24,8 @@ export default function TaskBoard({ tasks, loading, walletAddress, onClaim, onSu
         <motion.div
           className="task-board-header"
           variants={fadeUp(16)}
-          {...scrollProps}
+          initial="hidden"
+          animate="visible"
         >
           <div>
             <h2>Bounty Board</h2>
@@ -51,7 +52,8 @@ export default function TaskBoard({ tasks, loading, walletAddress, onClaim, onSu
         <motion.div
           className="task-grid"
           variants={gridContainer}
-          {...scrollProps}
+          initial="hidden"
+          animate="visible"
         >
           {loading ? (
             <>

@@ -83,7 +83,8 @@ export default function HomePage({ tasks, walletAddress }) {
         <motion.div
           style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}
           variants={fadeUp(16)}
-          {...scrollProps}
+          initial="hidden"
+          animate="visible"
         >
           <h2>{isPoster ? 'Your Posted Bounties' : 'Open Bounties for You'}</h2>
           <motion.button
@@ -96,7 +97,7 @@ export default function HomePage({ tasks, walletAddress }) {
           </motion.button>
         </motion.div>
 
-        <motion.div className="task-grid" variants={gridContainer} {...scrollProps}>
+        <motion.div className="task-grid" variants={gridContainer} initial="hidden" animate="visible">
           {(isPoster
             ? tasks.filter(t => t.creator_wallet === walletAddress).slice(0, 3)
             : tasks.filter(t => t.status === 'OPEN' && t.creator_wallet !== walletAddress).slice(0, 3)
