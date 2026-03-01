@@ -15,7 +15,8 @@ export default function WalletPage({ walletAddress, tasks, onConnect }) {
 
   // Fetch escrow info
   useEffect(() => {
-    fetch('http://localhost:8000/escrow/info')
+    const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+    fetch(`${apiBase}/escrow/info`)
       .then(res => res.json())
       .then(data => setEscrowInfo(data))
       .catch(() => setEscrowInfo(null));
