@@ -607,22 +607,7 @@
   position: relative;
 }
 
-.post-task-card::before {
-  content: "";
-  position: absolute;
-  top: -60px;
-  right: -50px;
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  background: var(--bg-accent-soft);
-  z-index: 0;
-}
 
-.post-task-card>* {
-  position: relative;
-  z-index: 1;
-}
 
 .post-task-header {
   margin-bottom: var(--space-component);
@@ -1337,7 +1322,7 @@
 }
 
 .ai-step-card {
-  border: 2px solid transparent;
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
   border-radius: var(--radius-default);
   padding: 28px;
   text-align: center;
@@ -1345,7 +1330,7 @@
 }
 
 .ai-step-card:hover {
-  border-color: var(--border-dark);
+  border-color: rgba(0, 0, 0, 0.35);
 }
 
 .ai-step-number {
@@ -1381,7 +1366,7 @@
 }
 
 .security-card {
-  border: 2px solid transparent;
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
   border-radius: var(--radius-default);
   padding: 24px;
   text-align: center;
@@ -1474,7 +1459,7 @@
 }
 
 .pain-card {
-  border: 2px solid transparent;
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
   border-radius: var(--radius-default);
   padding: 28px;
   text-align: center;
@@ -1482,7 +1467,7 @@
 }
 
 .pain-card:hover {
-  border-color: var(--border-dark);
+  border-color: rgba(0, 0, 0, 0.35);
 }
 
 .pain-icon {
@@ -1520,7 +1505,7 @@
 }
 
 .flow-step {
-  border: 2px solid transparent;
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
   border-radius: var(--radius-default);
   padding: 28px;
   text-align: center;
@@ -1528,7 +1513,7 @@
 }
 
 .flow-step:hover {
-  border-color: var(--border-dark);
+  border-color: rgba(0, 0, 0, 0.35);
 }
 
 .flow-step-num {

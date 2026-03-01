@@ -67,6 +67,15 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  outline-color: var(--accent-black, #000) !important;
+}
+
+/* Remove all blue focus rings and borders */
+*:focus,
+*:focus-visible,
+*:focus-within {
+  outline-color: var(--accent-black, #000) !important;
+  border-color: inherit;
 }
 
 html {
@@ -96,7 +105,7 @@ img {
 }
 
 a {
-  color: var(--accent-blue);
+  color: var(--text-primary);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
@@ -185,8 +194,17 @@ p {
 }
 
 .btn:focus-visible {
-  outline: 2px solid var(--accent-blue);
+  outline: 2px solid var(--accent-black);
   outline-offset: 2px;
+}
+
+/* Kill all blue outlines/borders globally */
+*:focus {
+  outline-color: var(--accent-black) !important;
+}
+
+*:focus-visible {
+  outline-color: var(--accent-black) !important;
 }
 
 /* Primary — Accent Green fill, black text */
