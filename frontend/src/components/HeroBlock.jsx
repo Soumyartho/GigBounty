@@ -26,7 +26,14 @@ const buttonContainer = staggerContainer(STAGGER.fast, 0.05);
 // Shared entrance for buttons
 const btnVariant = fadeUp(14, DURATION.medium);
 
-export default function HeroBlock({ onGetStarted, onLearnMore }) {
+export default function HeroBlock({
+  onGetStarted,
+  onLearnMore,
+  heading = 'Decentralized Micro-Task Bounty Board',
+  sub = 'Post tasks, lock ALGO in escrow, and pay workers instantly on completion. Powered by Algorand blockchain with optional AI verification.',
+  ctaLabel = 'Post a Bounty',
+  secondaryLabel = 'Learn More',
+}) {
   const motionProps = useMotionProps();
 
   return (
@@ -38,14 +45,12 @@ export default function HeroBlock({ onGetStarted, onLearnMore }) {
       >
         {/* Left — Text */}
         <div className="hero-content">
-          <motion.h1 variants={fadeUp(22, DURATION.slow)}>
-            Decentralized Micro-Task Bounty Board
+          <motion.h1 variants={fadeUp(22, DURATION.slow)} style={{ whiteSpace: 'pre-line' }}>
+            {heading}
           </motion.h1>
 
           <motion.p variants={fadeUp(20, DURATION.medium)}>
-            Post tasks, lock ALGO in escrow, and pay workers instantly on
-            completion. Powered by Algorand blockchain with optional AI
-            verification.
+            {sub}
           </motion.p>
 
           <motion.div className="hero-actions" variants={buttonContainer}>
@@ -57,7 +62,7 @@ export default function HeroBlock({ onGetStarted, onLearnMore }) {
               whileHover={buttonHover}
               whileTap={buttonTap}
             >
-              Post a Bounty
+              {ctaLabel}
             </motion.button>
             <motion.button
               className="btn btn-secondary"
@@ -66,7 +71,7 @@ export default function HeroBlock({ onGetStarted, onLearnMore }) {
               whileHover={buttonHover}
               whileTap={buttonTap}
             >
-              Learn More
+              {secondaryLabel}
             </motion.button>
           </motion.div>
         </div>

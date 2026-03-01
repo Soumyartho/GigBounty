@@ -5,9 +5,11 @@ from datetime import datetime
 from typing import Optional
 
 DB_FILE = os.path.join(os.path.dirname(__file__), "tasks_db.json")
+ROLES_FILE = os.path.join(os.path.dirname(__file__), "wallet_roles.json")
 
-# In-memory database
+# In-memory databases
 _tasks: dict = {}
+_wallet_roles: dict = {}  # { wallet_address: 'poster' | 'acceptor' }
 
 
 def _load_db():
@@ -74,6 +76,7 @@ def update_task(task_id: str, updates: dict) -> Optional[dict]:
     return _tasks[task_id]
 
 
+
 def delete_task(task_id: str) -> bool:
     """Delete a task."""
     if task_id in _tasks:
@@ -83,5 +86,37 @@ def delete_task(task_id: str) -> bool:
     return False
 
 
+# ─── Wallet Roles ─────────────────────────────────────────────
+
+def _load_roles():
+    """Load wallet roles from JSON file on startup."""
+    global _wallet_roles
+    if os.path.exists(ROLES_FILE):
+        try:
+            with open(ROLES_FILE, "r") as f:
+                _wallet_roles = json.load(f)
+        except (json.JSONDecodeError, TypeError):
+            _wallet_roles = {}
+
+
+def _save_roles():
+    """Persist wallet roles to JSON file."""
+    with open(ROLES_FILE, "w") as f:
+        json.dump(_wallet_roles, f, indent=2)
+
+
+def get_wallet_role(address: str) -> Optional[str]:
+    """Get role for a wallet address ('poster' | 'acceptor' | None)."""
+    return _wallet_roles.get(address)
+
+
+def set_wallet_role(address: str, role: str) -> str:
+    """Set role for a wallet address."""
+    _wallet_roles[address] = role
+    _save_roles()
+    return role
+
+
 # Load on import
 _load_db()
+_load_roles()

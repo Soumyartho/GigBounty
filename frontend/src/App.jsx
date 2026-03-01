@@ -8,6 +8,7 @@ import Toast from './components/Toast';
 import useWallet from './hooks/useWallet';
 import { api, setWalletAddress } from './services/api';
 import { buildEscrowPayment, submitTransaction, getEscrowAddress } from './services/algorand';
+import { RoleProvider } from './context/RoleContext';
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -335,7 +336,7 @@ function App() {
   };
 
   return (
-    <>
+    <RoleProvider walletAddress={walletAddress}>
       <Navbar
         walletAddress={walletAddress}
         onConnect={handleConnect}
@@ -344,7 +345,7 @@ function App() {
 
       <main>
         <Routes>
-          <Route path="/" element={<HomePage tasks={tasks} />} />
+          <Route path="/" element={<HomePage tasks={tasks} walletAddress={walletAddress} />} />
           <Route
             path="/tasks"
             element={
@@ -432,7 +433,7 @@ function App() {
       )}
 
 
-    </>
+    </RoleProvider>
   );
 }
 

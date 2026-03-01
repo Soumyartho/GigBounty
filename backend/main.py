@@ -49,6 +49,29 @@ async def escrow_info():
     return get_escrow_info()
 
 
+# ─── GET /wallet/{address}/role ───────────────────────────────
+@app.get("/wallet/{address}/role")
+async def get_role(address: str):
+    """Get role for a wallet address."""
+    role = db.get_wallet_role(address)
+    return {"role": role}
+
+
+# ─── POST /wallet/role ────────────────────────────────────────
+@app.post("/wallet/role")
+async def set_role(request: Request):
+    """Set or update role for a wallet address."""
+    body = await request.json()
+    address = body.get("wallet_address")
+    role = body.get("role")
+    if not address:
+        raise HTTPException(status_code=400, detail="wallet_address is required")
+    if role not in ("poster", "acceptor"):
+        raise HTTPException(status_code=400, detail="role must be 'poster' or 'acceptor'")
+    db.set_wallet_role(address, role)
+    return {"wallet_address": address, "role": role}
+
+
 # ─── GET /tasks ───────────────────────────────────────────────
 @app.get("/tasks", response_model=list[TaskResponse])
 async def get_tasks():

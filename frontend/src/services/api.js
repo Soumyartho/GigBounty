@@ -100,4 +100,14 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ task_id: taskId }),
     }),
+
+  // Get wallet role
+  getWalletRole: (address) => request(`/wallet/${address}/role`),
+
+  // Set wallet role
+  setWalletRole: (address, role) =>
+    request('/wallet/role', {
+      method: 'POST',
+      body: JSON.stringify({ wallet_address: address, role }),
+    }),
 };

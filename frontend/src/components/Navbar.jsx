@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 import { EASE, DURATION, fadeIn, buttonHover, buttonTap } from '../lib/motion';
+import { useRole } from '../context/RoleContext';
 
 const navVariant = {
   hidden: { opacity: 0, y: -12 },
@@ -16,6 +17,7 @@ export default function Navbar({ walletAddress, onConnect, onDisconnect }) {
   const navigate = useNavigate();
   const prefersReduced = useReducedMotion();
   const [scrolled, setScrolled] = useState(false);
+  const { role, clearRole } = useRole();
 
   // Track scroll for subtle background opacity change
   useEffect(() => {
@@ -88,6 +90,16 @@ export default function Navbar({ walletAddress, onConnect, onDisconnect }) {
         </ul>
 
         <div className="navbar-actions">
+          {/* Role badge — click to switch */}
+          {role && walletAddress && (
+            <button
+              className={`navbar-role-badge navbar-role-badge--${role}`}
+              onClick={clearRole}
+              title="Click to switch role"
+            >
+              {role === 'poster' ? '📋 POSTER' : '⚡ ACCEPTOR'}
+            </button>
+          )}
           {walletAddress ? (
             <>
               <div className="navbar-wallet">
