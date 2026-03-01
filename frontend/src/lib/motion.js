@@ -131,6 +131,6 @@ export function useScrollRevealProps() {
     return {
         initial: 'hidden',
         whileInView: 'visible',
-        viewport: { once: true, margin: '-60px' },
+        viewport: { once: true, margin: '0px' },
     };
 }
